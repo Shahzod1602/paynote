@@ -29,9 +29,9 @@ services:
       IDENTIFY_SMS_SIM: ${IDENTIFY_SMS_SIM:-}
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
       TELEGRAM_OWNER_CHAT_ID: ${TELEGRAM_OWNER_CHAT_ID:-}
-    # Host 3008 -> container 3000. Reachable at http://<server-ip>:3008
+    # Faqat localhost:3008 -> container 3000. Tashqi kirish nginx (paynote.identify.uz, 443) orqali.
     ports:
-      - "3008:3000"
+      - "127.0.0.1:3008:3000"
 
 volumes:
   pgdata:
