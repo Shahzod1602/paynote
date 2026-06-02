@@ -1,0 +1,260 @@
+{
+  "meta": {
+    "title": "cash.identify.uz — Debt ledger & installment sales app",
+    "description": "Track customer debts without paper notebooks. Automated SMS reminders, multi-store support and reports for small businesses in Uzbekistan."
+  },
+  "brand": { "name": "cash.identify.uz" },
+  "nav": {
+    "how": "How it works",
+    "features": "Features",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "blog": "Blog",
+    "login": "Log in",
+    "cta": "Try it now"
+  },
+  "hero": {
+    "badge": "5,000+ businesses trust us",
+    "title": "Struggling with debt tracking & installments?",
+    "titleAccent": "Try the simple solution",
+    "subtitle": "cash.identify.uz is a debt ledger and installment sales app. Track who owes you without paper notebooks — with automated SMS reminders.",
+    "ctaPrimary": "Try it now",
+    "ctaSecondary": "How it works",
+    "stat1": "5,000+",
+    "stat1Label": "Active businesses",
+    "stat2": "1.2M+",
+    "stat2Label": "Debts tracked",
+    "stat3": "₸18B+",
+    "stat3Label": "Recovered on time"
+  },
+  "steps": {
+    "title": "Get started in 4 simple steps",
+    "subtitle": "From download to full control of your debts — in minutes.",
+    "items": [
+      { "title": "Download the app", "text": "Available on the App Store and Play Market for free." },
+      { "title": "Register", "text": "Create an account and unlock all of cash.identify.uz's features." },
+      { "title": "Keep accounts", "text": "Record daily sales and debts — securely synced online." },
+      { "title": "Monitor debts", "text": "See who owes you, what you owe, and get paid on time." }
+    ]
+  },
+  "features": {
+    "title": "Everything you need to run a debt-free shop",
+    "subtitle": "Built for merchants, kiosks and installment sellers across Uzbekistan.",
+    "items": [
+      { "title": "Total debt visibility", "text": "See the exact balance for every customer across all your stores in real time." },
+      { "title": "Transaction history", "text": "A complete, searchable record of every loan, repayment and installment." },
+      { "title": "Automated reminders", "text": "Send SMS and voice reminders automatically so no debt is ever forgotten." },
+      { "title": "Multi-store & sellers", "text": "Manage several stores and staff accounts from a single dashboard." },
+      { "title": "Multi-currency", "text": "Track balances in UZS and USD with up-to-date conversion." },
+      { "title": "Reports", "text": "Clear financial reports to understand your cash flow at a glance." }
+    ]
+  },
+  "pricing": {
+    "title": "Simple pricing for every business",
+    "subtitle": "Start free. Upgrade as you grow.",
+    "perMonth": "/mo",
+    "popular": "Popular choice",
+    "cta": "Get started",
+    "ctaContact": "Contact us",
+    "plans": [
+      {
+        "name": "Free",
+        "price": "$0",
+        "desc": "For trying things out",
+        "features": ["1 business", "25 SMS / month", "Basic reports", "Mobile app access"]
+      },
+      {
+        "name": "Small",
+        "price": "$2",
+        "desc": "For a single shop",
+        "features": ["2 businesses", "Discounted SMS rates", "Transaction history", "Email support"]
+      },
+      {
+        "name": "Medium",
+        "price": "$10",
+        "desc": "Most popular for growing shops",
+        "popular": true,
+        "features": ["10 businesses", "Cheaper SMS rates", "Advanced reports", "Priority support"]
+      },
+      {
+        "name": "Large",
+        "price": "$50",
+        "desc": "For chains and networks",
+        "features": ["Unlimited businesses", "Lowest SMS rates", "Full reports & export", "Dedicated support"]
+      },
+      {
+        "name": "Corporate",
+        "price": "Custom",
+        "desc": "Tailored enterprise solution",
+        "features": ["Custom integrations", "API access", "SLA & onboarding", "Account manager"]
+      }
+    ]
+  },
+  "faq": {
+    "title": "Frequently asked questions",
+    "subtitle": "Everything you need to know about cash.identify.uz.",
+    "items": [
+      { "q": "Do I need internet to use cash.identify.uz?", "a": "You can record transactions offline. Data automatically syncs once you reconnect." },
+      { "q": "How do SMS reminders work?", "a": "cash.identify.uz sends automated SMS and voice reminders to customers based on their payment schedule, so you never have to chase debts manually." },
+      { "q": "Can I manage more than one store?", "a": "Yes. With paid plans you can manage multiple stores and seller accounts from a single dashboard." },
+      { "q": "Which currencies are supported?", "a": "cash.identify.uz supports UZS and USD, so you can keep balances in the currency that suits your business." },
+      { "q": "Is my data safe?", "a": "Your data is stored securely in the cloud and backed up automatically. Only you and the sellers you invite can access it." },
+      { "q": "How do I get started?", "a": "Download the app, register for a free account, and start adding your customers and debts in minutes." }
+    ]
+  },
+  "cta": {
+    "title": "Ready to ditch the paper notebook?",
+    "subtitle": "Join 5,000+ businesses already tracking debts the smart way.",
+    "button": "Try it now",
+    "appStore": "App Store",
+    "playMarket": "Play Market"
+  },
+  "footer": {
+    "tagline": "The simple debt ledger and installment sales app for modern businesses.",
+    "product": "Product",
+    "company": "Company",
+    "contact": "Contact",
+    "links": {
+      "how": "How it works",
+      "features": "Features",
+      "pricing": "Pricing",
+      "faq": "FAQ",
+      "blog": "Blog",
+      "about": "About us",
+      "contactUs": "Contact"
+    },
+    "phone": "+998 95 221 21 44",
+    "rights": "All rights reserved.",
+    "poweredBy": "Powered by TheDevs.uz"
+  },
+  "auth": {
+    "loginTitle": "Welcome back",
+    "loginSubtitle": "Log in to your cash.identify.uz account.",
+    "registerTitle": "Create your account",
+    "registerSubtitle": "Start tracking debts in minutes.",
+    "name": "Full name",
+    "phone": "Phone number",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "loginButton": "Log in",
+    "registerButton": "Create account",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "signUp": "Sign up",
+    "signIn": "Sign in",
+    "backHome": "Back to home",
+    "invalid": "Wrong phone number or password.",
+    "phoneTaken": "This phone number is already registered.",
+    "invalidInput": "Please check the form and try again.",
+    "demoTitle": "Demo account",
+    "demoHint": "Phone: +998 90 123 45 67 · Password: demo1234",
+    "demoFill": "Log in with demo account"
+  },
+  "dashboard": {
+    "nav": { "overview": "Overview", "customers": "Customers", "debts": "Debts", "templates": "Templates", "messages": "SMS", "reports": "Reports", "settings": "Settings", "logout": "Log out" },
+    "title": "Overview",
+    "welcome": "Welcome back",
+    "demoNotice": "This is a UI skeleton — connect your backend to make it live.",
+    "stats": {
+      "totalDebt": "Total outstanding",
+      "customers": "Customers",
+      "overdue": "Overdue",
+      "collected": "Collected this month"
+    },
+    "recent": "Recent transactions",
+    "customersTitle": "Customers",
+    "addCustomer": "Add customer",
+    "debtsTitle": "Debts",
+    "addDebt": "Add debt",
+    "table": { "customer": "Customer", "phone": "Phone", "amount": "Amount", "due": "Due date", "status": "Status" },
+    "status": { "paid": "Paid", "pending": "Pending", "overdue": "Overdue" },
+    "empty": "No data yet. This is where your records will appear.",
+    "form": {
+      "newCustomer": "New customer",
+      "editCustomer": "Edit customer",
+      "newDebt": "New debt",
+      "name": "Full name",
+      "phone": "Phone number",
+      "note": "Note",
+      "amount": "Amount (UZS)",
+      "dueDate": "Due date",
+      "customer": "Customer",
+      "selectCustomer": "Select a customer",
+      "save": "Save",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleteConfirm": "Delete this record? This cannot be undone.",
+      "payment": "Record payment",
+      "paymentAmount": "Payment amount (UZS)",
+      "remaining": "Remaining",
+      "noCustomers": "Add a customer first.",
+      "saving": "Saving...",
+      "error": "Something went wrong. Please try again.",
+      "telegramChatId": "Telegram chat ID",
+      "telegramHint": "The customer must start your bot first. Leave empty if unknown.",
+      "reminder": "Reminder",
+      "reminderTitle": "Send reminder",
+      "channel": "Channel",
+      "channelAuto": "Auto (Telegram, else SMS)",
+      "channelTelegram": "Telegram",
+      "channelSms": "SMS",
+      "send": "Send",
+      "sending": "Sending...",
+      "sent": "Reminder sent ✓",
+      "mockSent": "Sent in mock mode (no keys configured) — check server logs.",
+      "failed": "Sending failed.",
+      "noPhone": "This customer has no phone number.",
+      "noTelegram": "This customer has no Telegram chat ID.",
+      "noSmsBalance": "SMS balance is empty. Your free quota is used up.",
+      "rateLimited": "Too many SMS sent recently. Please try again later.",
+      "findContacts": "People who started the bot",
+      "loadingContacts": "Loading...",
+      "noContacts": "Nobody has started the bot yet. Open the bot and press Start.",
+      "tgNotConfigured": "Telegram bot is not configured.",
+      "chatIdSaved": "Chat ID saved.",
+      "template": "Template",
+      "templateDefault": "Default text (built-in)",
+      "templateUnavailable": "Template is unavailable or not approved."
+    },
+    "messages": {
+      "title": "SMS history",
+      "subtitle": "Reminders sent over SMS and Telegram.",
+      "balanceLabel": "Remaining SMS",
+      "balanceUnit": "SMS left",
+      "balanceLow": "Your SMS balance is running low.",
+      "table": { "date": "Date", "customer": "Customer", "channel": "Channel", "recipient": "Recipient", "status": "Status", "text": "Message" },
+      "status": { "SENT": "Sent", "FAILED": "Failed", "MOCK": "Mock" },
+      "empty": "No messages sent yet. Use the \"Reminder\" button on the Debts page."
+    },
+    "templates": {
+      "title": "SMS templates",
+      "subtitle": "Reusable message templates with variables. Once approved they can be picked when sending reminders.",
+      "add": "New template",
+      "empty": "No templates yet. Create your first one.",
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleteConfirm": "Delete this template?",
+      "save": "Save",
+      "cancel": "Cancel",
+      "saving": "Saving...",
+      "error": "Name (min 2 chars) and body for all languages are required.",
+      "newTemplate": "Create template",
+      "editTemplate": "Edit template",
+      "moderationNote": "If you change this template, it may take 2 to 48 hours for operators to approve it.",
+      "typeLabel": "Template type",
+      "nameLabel": "Template name",
+      "namePlaceholder": "e.g. Gentle reminder",
+      "bodyLabel": "Template body",
+      "bodyPlaceholder": "Dear {{client_name}}, you owe {{debt_amount}} {{currency}}...",
+      "variablesHint": "Use these as variables:",
+      "requiresDebt": "Debt selection required",
+      "requiresDay": "Day input required",
+      "smsEnabled": "Available for SMS sending",
+      "previewSender": "4546",
+      "previewEmpty": "No text to preview",
+      "types": { "REMINDER": "Reminder", "OVERDUE": "Overdue", "PAYMENT": "Payment received", "CUSTOM": "Custom" },
+      "statuses": { "PENDING": "Pending", "APPROVED": "Approved", "REJECTED": "Rejected" }
+    }
+  }
+}

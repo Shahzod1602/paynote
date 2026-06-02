@@ -1,0 +1,260 @@
+{
+  "meta": {
+    "title": "cash.identify.uz — Qarz daftari va nasiya savdosi ilovasi",
+    "description": "Mijozlar qarzini qog'oz daftarsiz nazorat qiling. Avtomatik SMS eslatmalar, ko'p do'kon va hisobotlar — O'zbekistondagi kichik bizneslar uchun."
+  },
+  "brand": { "name": "cash.identify.uz" },
+  "nav": {
+    "how": "Qanday ishlaydi",
+    "features": "Imkoniyatlar",
+    "pricing": "Narxlar",
+    "faq": "Savol-javob",
+    "blog": "Blog",
+    "login": "Kirish",
+    "cta": "Sinab ko'rish"
+  },
+  "hero": {
+    "badge": "5,000+ biznes bizga ishonadi",
+    "title": "Qarz va nasiyani kuzatish qiyinmi?",
+    "titleAccent": "Oddiy yechimni sinab ko'ring",
+    "subtitle": "cash.identify.uz — qarz daftari va nasiya savdosi ilovasi. Kim sizdan qarzdor ekanini qog'oz daftarsiz, avtomatik SMS eslatmalar bilan kuzating.",
+    "ctaPrimary": "Sinab ko'rish",
+    "ctaSecondary": "Qanday ishlaydi",
+    "stat1": "5,000+",
+    "stat1Label": "Faol biznes",
+    "stat2": "1.2M+",
+    "stat2Label": "Kuzatilgan qarz",
+    "stat3": "₸18 mlrd+",
+    "stat3Label": "O'z vaqtida qaytarilgan"
+  },
+  "steps": {
+    "title": "4 oddiy qadamda boshlang",
+    "subtitle": "Yuklab olishdan to qarzlaringizni to'liq nazoratiga olishgacha — bir necha daqiqada.",
+    "items": [
+      { "title": "Ilovani yuklab oling", "text": "App Store va Play Marketda bepul mavjud." },
+      { "title": "Ro'yxatdan o'ting", "text": "Hisob yarating va cash.identify.uz barcha imkoniyatlaridan foydalaning." },
+      { "title": "Hisob yuriting", "text": "Kunlik savdo va qarzlarni yozing — onlayn xavfsiz saqlanadi." },
+      { "title": "Qarzni nazorat qiling", "text": "Kim qarzdor, qancha qarzingiz borligini ko'ring va o'z vaqtida oling." }
+    ]
+  },
+  "features": {
+    "title": "Qarzsiz do'kon yuritish uchun kerak bo'lgan hamma narsa",
+    "subtitle": "O'zbekiston bo'ylab savdogarlar, do'konchilar va nasiya sotuvchilar uchun.",
+    "items": [
+      { "title": "To'liq qarz ko'rinishi", "text": "Barcha do'konlaringizdagi har bir mijozning aniq balansini real vaqtda ko'ring." },
+      { "title": "Tranzaksiya tarixi", "text": "Har bir qarz, to'lov va nasiyaning to'liq, qidiriladigan yozuvi." },
+      { "title": "Avtomatik eslatmalar", "text": "SMS va ovozli eslatmalarni avtomatik yuboring — birorta qarz unutilmaydi." },
+      { "title": "Ko'p do'kon va sotuvchi", "text": "Bir nechta do'kon va xodimlarni bitta panelda boshqaring." },
+      { "title": "Ko'p valyuta", "text": "Balanslarni so'm va dollarda kuzating, dolzarb kurs bilan." },
+      { "title": "Hisobotlar", "text": "Pul oqimini bir qarashda tushunish uchun aniq moliyaviy hisobotlar." }
+    ]
+  },
+  "pricing": {
+    "title": "Har bir biznes uchun oddiy narxlar",
+    "subtitle": "Bepul boshlang. O'sgan sari kengaytiring.",
+    "perMonth": "/oy",
+    "popular": "Ommabop tanlov",
+    "cta": "Boshlash",
+    "ctaContact": "Bog'lanish",
+    "plans": [
+      {
+        "name": "Bepul",
+        "price": "$0",
+        "desc": "Sinab ko'rish uchun",
+        "features": ["1 biznes", "25 SMS / oy", "Asosiy hisobotlar", "Mobil ilova"]
+      },
+      {
+        "name": "Kichik",
+        "price": "$2",
+        "desc": "Bitta do'kon uchun",
+        "features": ["2 biznes", "Chegirmali SMS narxi", "Tranzaksiya tarixi", "Email yordam"]
+      },
+      {
+        "name": "O'rta",
+        "price": "$10",
+        "desc": "O'sayotgan do'konlar uchun eng ommabop",
+        "popular": true,
+        "features": ["10 biznes", "Arzonroq SMS narxi", "Kengaytirilgan hisobotlar", "Ustuvor yordam"]
+      },
+      {
+        "name": "Katta",
+        "price": "$50",
+        "desc": "Tarmoq va zanjirlar uchun",
+        "features": ["Cheksiz biznes", "Eng arzon SMS narxi", "To'liq hisobot va eksport", "Maxsus yordam"]
+      },
+      {
+        "name": "Korporativ",
+        "price": "Kelishuv",
+        "desc": "Korxonaga moslashtirilgan yechim",
+        "features": ["Maxsus integratsiyalar", "API kirish", "SLA va joriy etish", "Shaxsiy menejer"]
+      }
+    ]
+  },
+  "faq": {
+    "title": "Ko'p so'raladigan savollar",
+    "subtitle": "cash.identify.uz haqida bilishingiz kerak bo'lgan hamma narsa.",
+    "items": [
+      { "q": "cash.identify.uz dan foydalanish uchun internet kerakmi?", "a": "Tranzaksiyalarni internetsiz yozishingiz mumkin. Ulanish tiklanganda ma'lumotlar avtomatik sinxronlanadi." },
+      { "q": "SMS eslatmalar qanday ishlaydi?", "a": "cash.identify.uz to'lov jadvaliga qarab mijozlarga avtomatik SMS va ovozli eslatma yuboradi — qarzni qo'lda eslatib o'tirmaysiz." },
+      { "q": "Bir nechta do'konni boshqara olamanmi?", "a": "Ha. Pulli rejalarda bir nechta do'kon va sotuvchi hisoblarini bitta paneldan boshqarishingiz mumkin." },
+      { "q": "Qaysi valyutalar qo'llab-quvvatlanadi?", "a": "cash.identify.uz so'm va dollarni qo'llab-quvvatlaydi — balanslarni biznesingizga mos valyutada yuritasiz." },
+      { "q": "Ma'lumotlarim xavfsizmi?", "a": "Ma'lumotlaringiz bulutda xavfsiz saqlanadi va avtomatik zaxiralanadi. Faqat siz va taklif qilgan sotuvchilaringiz kira oladi." },
+      { "q": "Qanday boshlayman?", "a": "Ilovani yuklab oling, bepul hisob oching va bir necha daqiqada mijoz va qarzlarni qo'sha boshlang." }
+    ]
+  },
+  "cta": {
+    "title": "Qog'oz daftarni tashlashga tayyormisiz?",
+    "subtitle": "Qarzni aqlli usulda kuzatayotgan 5,000+ biznesga qo'shiling.",
+    "button": "Sinab ko'rish",
+    "appStore": "App Store",
+    "playMarket": "Play Market"
+  },
+  "footer": {
+    "tagline": "Zamonaviy bizneslar uchun oddiy qarz daftari va nasiya savdosi ilovasi.",
+    "product": "Mahsulot",
+    "company": "Kompaniya",
+    "contact": "Bog'lanish",
+    "links": {
+      "how": "Qanday ishlaydi",
+      "features": "Imkoniyatlar",
+      "pricing": "Narxlar",
+      "faq": "Savol-javob",
+      "blog": "Blog",
+      "about": "Biz haqimizda",
+      "contactUs": "Bog'lanish"
+    },
+    "phone": "+998 95 221 21 44",
+    "rights": "Barcha huquqlar himoyalangan.",
+    "poweredBy": "TheDevs.uz tomonidan"
+  },
+  "auth": {
+    "loginTitle": "Xush kelibsiz",
+    "loginSubtitle": "cash.identify.uz hisobingizga kiring.",
+    "registerTitle": "Hisob yarating",
+    "registerSubtitle": "Bir necha daqiqada qarz kuzatishni boshlang.",
+    "name": "To'liq ism",
+    "phone": "Telefon raqami",
+    "password": "Parol",
+    "confirmPassword": "Parolni tasdiqlang",
+    "loginButton": "Kirish",
+    "registerButton": "Hisob yaratish",
+    "noAccount": "Hisobingiz yo'qmi?",
+    "haveAccount": "Hisobingiz bormi?",
+    "signUp": "Ro'yxatdan o'tish",
+    "signIn": "Kirish",
+    "backHome": "Bosh sahifaga",
+    "invalid": "Telefon raqami yoki parol noto'g'ri.",
+    "phoneTaken": "Bu telefon raqami allaqachon ro'yxatdan o'tgan.",
+    "invalidInput": "Iltimos, formani tekshirib qaytadan urinib ko'ring.",
+    "demoTitle": "Demo hisob",
+    "demoHint": "Telefon: +998 90 123 45 67 · Parol: demo1234",
+    "demoFill": "Demo hisob bilan kirish"
+  },
+  "dashboard": {
+    "nav": { "overview": "Umumiy", "customers": "Mijozlar", "debts": "Qarzlar", "templates": "Shablonlar", "messages": "SMS", "reports": "Hisobotlar", "settings": "Sozlamalar", "logout": "Chiqish" },
+    "title": "Umumiy ko'rinish",
+    "welcome": "Xush kelibsiz",
+    "demoNotice": "Bu UI karkasi — jonli qilish uchun backendni ulang.",
+    "stats": {
+      "totalDebt": "Jami qarzdorlik",
+      "customers": "Mijozlar",
+      "overdue": "Muddati o'tgan",
+      "collected": "Shu oyda yig'ilgan"
+    },
+    "recent": "So'nggi tranzaksiyalar",
+    "customersTitle": "Mijozlar",
+    "addCustomer": "Mijoz qo'shish",
+    "debtsTitle": "Qarzlar",
+    "addDebt": "Qarz qo'shish",
+    "table": { "customer": "Mijoz", "phone": "Telefon", "amount": "Summa", "due": "Muddat", "status": "Holat" },
+    "status": { "paid": "To'langan", "pending": "Kutilmoqda", "overdue": "Muddati o'tgan" },
+    "empty": "Hozircha ma'lumot yo'q. Yozuvlaringiz shu yerda paydo bo'ladi.",
+    "form": {
+      "newCustomer": "Yangi mijoz",
+      "editCustomer": "Mijozni tahrirlash",
+      "newDebt": "Yangi qarz",
+      "name": "To'liq ism",
+      "phone": "Telefon raqami",
+      "note": "Izoh",
+      "amount": "Summa (so'm)",
+      "dueDate": "Muddat",
+      "customer": "Mijoz",
+      "selectCustomer": "Mijozni tanlang",
+      "save": "Saqlash",
+      "cancel": "Bekor qilish",
+      "edit": "Tahrirlash",
+      "delete": "O'chirish",
+      "deleteConfirm": "Bu yozuv o'chirilsinmi? Buni qaytarib bo'lmaydi.",
+      "payment": "To'lov kiritish",
+      "paymentAmount": "To'lov summasi (so'm)",
+      "remaining": "Qoldiq",
+      "noCustomers": "Avval mijoz qo'shing.",
+      "saving": "Saqlanmoqda...",
+      "error": "Xatolik yuz berdi. Qaytadan urinib ko'ring.",
+      "telegramChatId": "Telegram chat ID",
+      "telegramHint": "Mijoz avval botingizni ishga tushirishi kerak. Bilmasangiz bo'sh qoldiring.",
+      "reminder": "Eslatma",
+      "reminderTitle": "Eslatma yuborish",
+      "channel": "Kanal",
+      "channelAuto": "Avtomatik (Telegram, bo'lmasa SMS)",
+      "channelTelegram": "Telegram",
+      "channelSms": "SMS",
+      "send": "Yuborish",
+      "sending": "Yuborilmoqda...",
+      "sent": "Eslatma yuborildi ✓",
+      "mockSent": "Mock rejimda yuborildi (kalit yo'q) — server loglarini ko'ring.",
+      "failed": "Yuborib bo'lmadi.",
+      "noPhone": "Bu mijozda telefon raqami yo'q.",
+      "noTelegram": "Bu mijozda Telegram chat ID yo'q.",
+      "noSmsBalance": "SMS balansi tugagan. Bepul kvota ishlatib bo'lingan.",
+      "rateLimited": "Yaqinda juda ko'p SMS yuborildi. Birozdan so'ng urinib ko'ring.",
+      "findContacts": "Botni ishga tushirganlar",
+      "loadingContacts": "Yuklanmoqda...",
+      "noContacts": "Hali hech kim botni ishga tushirmagan. Botni ochib, Start bosing.",
+      "tgNotConfigured": "Telegram bot sozlanmagan.",
+      "chatIdSaved": "Chat ID saqlandi.",
+      "template": "Shablon",
+      "templateDefault": "Standart matn (built-in)",
+      "templateUnavailable": "Shablon mavjud emas yoki tasdiqlanmagan."
+    },
+    "messages": {
+      "title": "SMS tarixi",
+      "subtitle": "SMS va Telegram orqali yuborilgan eslatmalar.",
+      "balanceLabel": "Qolgan SMS",
+      "balanceUnit": "ta SMS qoldi",
+      "balanceLow": "SMS balansingiz tugab qolmoqda.",
+      "table": { "date": "Sana", "customer": "Mijoz", "channel": "Kanal", "recipient": "Qabul qiluvchi", "status": "Holat", "text": "Xabar" },
+      "status": { "SENT": "Yuborildi", "FAILED": "Xato", "MOCK": "Mock" },
+      "empty": "Hali xabar yuborilmagan. Qarzlar sahifasidagi \"Eslatma\" tugmasidan foydalaning."
+    },
+    "templates": {
+      "title": "SMS shablonlari",
+      "subtitle": "O'zgaruvchili qayta ishlatiladigan xabar shablonlari. Tasdiqlangach eslatmalarda tanlanadi.",
+      "add": "Yangi shablon",
+      "empty": "Hali shablon yo'q. Birinchi shablonni yarating.",
+      "edit": "Tahrirlash",
+      "delete": "O'chirish",
+      "deleteConfirm": "Bu shablon o'chirilsinmi?",
+      "save": "Saqlash",
+      "cancel": "Bekor qilish",
+      "saving": "Saqlanmoqda...",
+      "error": "Barcha tillar uchun matn va nom (kamida 2 belgi) to'ldirilishi shart.",
+      "newTemplate": "Shablon yaratish",
+      "editTemplate": "Shablonni tahrirlash",
+      "moderationNote": "Agar siz ushbu shablonni o'zgartirishga qaror qilsangiz, operatorlar tomonidan tasdiqlanishi uchun 2 soatdan 48 soatgacha vaqt ketadi.",
+      "typeLabel": "Shablon turi",
+      "nameLabel": "Shablon nomi",
+      "namePlaceholder": "Masalan: Muloyim eslatma",
+      "bodyLabel": "Shablon matni",
+      "bodyPlaceholder": "Hurmatli {{client_name}}, sizda {{debt_amount}} {{currency}} qarz bor...",
+      "variablesHint": "O'zgaruvchilar sifatida quyidagilardan foydalaning:",
+      "requiresDebt": "Qarz tanlash talab qilinadi",
+      "requiresDay": "Kun kiritish talab qilinadi",
+      "smsEnabled": "SMS jo'natmalar uchun mavjud",
+      "previewSender": "4546",
+      "previewEmpty": "Ko'rsatish uchun matn yo'q",
+      "types": { "REMINDER": "Eslatma", "OVERDUE": "Muddati o'tgan", "PAYMENT": "To'lov qabul qilindi", "CUSTOM": "Boshqa" },
+      "statuses": { "PENDING": "Tasdiqlanmoqda", "APPROVED": "Tasdiqlangan", "REJECTED": "Rad etilgan" }
+    }
+  }
+}

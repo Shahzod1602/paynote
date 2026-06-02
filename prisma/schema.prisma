@@ -1,0 +1,127 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String     @id @default(cuid())
+  name         String
+  phone        String     @unique
+  passwordHash String
+  businesses   Business[]
+  createdAt    DateTime   @default(now())
+}
+
+model Business {
+  id         String            @id @default(cuid())
+  name       String
+  currency   String            @default("UZS")
+  smsBalance Int               @default(50) // bepul boshlang'ich SMS kvotasi
+  userId     String
+  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  customers  Customer[]
+  debts      Debt[]
+  templates  MessageTemplate[]
+  createdAt  DateTime          @default(now())
+}
+
+enum TemplateType {
+  REMINDER // Eslatma
+  OVERDUE // Muddati o'tgan
+  PAYMENT // To'lov qabul qilindi
+  CUSTOM // Boshqa
+}
+
+enum TemplateStatus {
+  PENDING // Moderatsiyada
+  APPROVED // Tasdiqlangan
+  REJECTED // Rad etilgan
+}
+
+model MessageTemplate {
+  id           String         @id @default(cuid())
+  type         TemplateType   @default(REMINDER)
+  name         String
+  bodyUz       String
+  bodyRu       String
+  bodyEn       String
+  requiresDebt Boolean        @default(true) // Qarz tanlash talab qilinadi
+  requiresDay  Boolean        @default(false) // Kun kiritish talab qilinadi
+  smsEnabled   Boolean        @default(true) // SMS jo'natmalar uchun mavjud
+  status       TemplateStatus @default(PENDING)
+  businessId   String
+  business     Business       @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+model Customer {
+  id             String       @id @default(cuid())
+  name           String
+  phone          String?
+  note           String?
+  telegramChatId String?
+  businessId     String
+  business       Business     @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  debts          Debt[]
+  messages       MessageLog[]
+  createdAt      DateTime     @default(now())
+}
+
+enum DebtStatus {
+  PENDING
+  PAID
+  OVERDUE
+}
+
+model Debt {
+  id         String     @id @default(cuid())
+  amount     Decimal    @db.Decimal(14, 2)
+  currency   String     @default("UZS")
+  dueDate    DateTime?
+  note       String?
+  status     DebtStatus @default(PENDING)
+  customerId String
+  customer   Customer   @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  businessId String
+  business   Business   @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  payments   Payment[]
+  createdAt  DateTime   @default(now())
+}
+
+model Payment {
+  id     String   @id @default(cuid())
+  amount Decimal  @db.Decimal(14, 2)
+  debtId String
+  debt   Debt     @relation(fields: [debtId], references: [id], onDelete: Cascade)
+  paidAt DateTime @default(now())
+}
+
+enum NotifyChannel {
+  SMS
+  TELEGRAM
+}
+
+enum MessageStatus {
+  SENT
+  FAILED
+  MOCK
+}
+
+model MessageLog {
+  id         String        @id @default(cuid())
+  channel    NotifyChannel
+  status     MessageStatus
+  recipient  String
+  text       String
+  error      String?
+  businessId String
+  customerId String?
+  customer   Customer?     @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  debtId     String?
+  createdAt  DateTime      @default(now())
+}

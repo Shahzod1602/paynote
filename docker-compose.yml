@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: paynote
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: paynote
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U paynote -d paynote"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://paynote:${POSTGRES_PASSWORD}@db:5432/paynote?schema=public
+      AUTH_SECRET: ${AUTH_SECRET}
+      CRON_SECRET: ${CRON_SECRET}
+      IDENTIFY_SMS_API_KEY: ${IDENTIFY_SMS_API_KEY}
+      IDENTIFY_SMS_SIM: ${IDENTIFY_SMS_SIM:-}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_OWNER_CHAT_ID: ${TELEGRAM_OWNER_CHAT_ID:-}
+    # Host 3008 -> container 3000. Reachable at http://<server-ip>:3008
+    ports:
+      - "3008:3000"
+
+volumes:
+  pgdata:
