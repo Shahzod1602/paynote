@@ -77,7 +77,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: FooterDict }) {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-line pt-6 text-sm text-muted sm:flex-row">
-          <p>© {year} cash.identify.uz. {dict.rights}</p>
+          <p>© {year} Paynote. {dict.rights}</p>
           <p>{dict.poweredBy}</p>
         </div>
       </div>

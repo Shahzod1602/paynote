@@ -17,7 +17,7 @@ export function Logo({ className, withText = true }: { className?: string; withT
       </span>
       {withText && (
         <span className="text-lg font-bold tracking-tight text-ink">
-          cash.<span className="text-brand-600">identify</span><span className="text-muted">.uz</span>
+          Pay<span className="text-brand-600">note</span>
         </span>
       )}
     </span>

@@ -1,9 +1,9 @@
 {
   "meta": {
-    "title": "cash.identify.uz — Qarz daftari va nasiya savdosi ilovasi",
+    "title": "Paynote — Qarz daftari va nasiya savdosi ilovasi",
     "description": "Mijozlar qarzini qog'oz daftarsiz nazorat qiling. Avtomatik SMS eslatmalar, ko'p do'kon va hisobotlar — O'zbekistondagi kichik bizneslar uchun."
   },
-  "brand": { "name": "cash.identify.uz" },
+  "brand": { "name": "Paynote" },
   "nav": {
     "how": "Qanday ishlaydi",
     "features": "Imkoniyatlar",
@@ -17,7 +17,7 @@
     "badge": "5,000+ biznes bizga ishonadi",
     "title": "Qarz va nasiyani kuzatish qiyinmi?",
     "titleAccent": "Oddiy yechimni sinab ko'ring",
-    "subtitle": "cash.identify.uz — qarz daftari va nasiya savdosi ilovasi. Kim sizdan qarzdor ekanini qog'oz daftarsiz, avtomatik SMS eslatmalar bilan kuzating.",
+    "subtitle": "Paynote — qarz daftari va nasiya savdosi ilovasi. Kim sizdan qarzdor ekanini qog'oz daftarsiz, avtomatik SMS eslatmalar bilan kuzating.",
     "ctaPrimary": "Sinab ko'rish",
     "ctaSecondary": "Qanday ishlaydi",
     "stat1": "5,000+",
@@ -32,7 +32,7 @@
     "subtitle": "Yuklab olishdan to qarzlaringizni to'liq nazoratiga olishgacha — bir necha daqiqada.",
     "items": [
       { "title": "Ilovani yuklab oling", "text": "App Store va Play Marketda bepul mavjud." },
-      { "title": "Ro'yxatdan o'ting", "text": "Hisob yarating va cash.identify.uz barcha imkoniyatlaridan foydalaning." },
+      { "title": "Ro'yxatdan o'ting", "text": "Hisob yarating va Paynote barcha imkoniyatlaridan foydalaning." },
       { "title": "Hisob yuriting", "text": "Kunlik savdo va qarzlarni yozing — onlayn xavfsiz saqlanadi." },
       { "title": "Qarzni nazorat qiling", "text": "Kim qarzdor, qancha qarzingiz borligini ko'ring va o'z vaqtida oling." }
     ]
@@ -92,12 +92,12 @@
   },
   "faq": {
     "title": "Ko'p so'raladigan savollar",
-    "subtitle": "cash.identify.uz haqida bilishingiz kerak bo'lgan hamma narsa.",
+    "subtitle": "Paynote haqida bilishingiz kerak bo'lgan hamma narsa.",
     "items": [
-      { "q": "cash.identify.uz dan foydalanish uchun internet kerakmi?", "a": "Tranzaksiyalarni internetsiz yozishingiz mumkin. Ulanish tiklanganda ma'lumotlar avtomatik sinxronlanadi." },
-      { "q": "SMS eslatmalar qanday ishlaydi?", "a": "cash.identify.uz to'lov jadvaliga qarab mijozlarga avtomatik SMS va ovozli eslatma yuboradi — qarzni qo'lda eslatib o'tirmaysiz." },
+      { "q": "Paynote dan foydalanish uchun internet kerakmi?", "a": "Tranzaksiyalarni internetsiz yozishingiz mumkin. Ulanish tiklanganda ma'lumotlar avtomatik sinxronlanadi." },
+      { "q": "SMS eslatmalar qanday ishlaydi?", "a": "Paynote to'lov jadvaliga qarab mijozlarga avtomatik SMS va ovozli eslatma yuboradi — qarzni qo'lda eslatib o'tirmaysiz." },
       { "q": "Bir nechta do'konni boshqara olamanmi?", "a": "Ha. Pulli rejalarda bir nechta do'kon va sotuvchi hisoblarini bitta paneldan boshqarishingiz mumkin." },
-      { "q": "Qaysi valyutalar qo'llab-quvvatlanadi?", "a": "cash.identify.uz so'm va dollarni qo'llab-quvvatlaydi — balanslarni biznesingizga mos valyutada yuritasiz." },
+      { "q": "Qaysi valyutalar qo'llab-quvvatlanadi?", "a": "Paynote so'm va dollarni qo'llab-quvvatlaydi — balanslarni biznesingizga mos valyutada yuritasiz." },
       { "q": "Ma'lumotlarim xavfsizmi?", "a": "Ma'lumotlaringiz bulutda xavfsiz saqlanadi va avtomatik zaxiralanadi. Faqat siz va taklif qilgan sotuvchilaringiz kira oladi." },
       { "q": "Qanday boshlayman?", "a": "Ilovani yuklab oling, bepul hisob oching va bir necha daqiqada mijoz va qarzlarni qo'sha boshlang." }
     ]
@@ -129,7 +129,7 @@
   },
   "auth": {
     "loginTitle": "Xush kelibsiz",
-    "loginSubtitle": "cash.identify.uz hisobingizga kiring.",
+    "loginSubtitle": "Paynote hisobingizga kiring.",
     "registerTitle": "Hisob yarating",
     "registerSubtitle": "Bir necha daqiqada qarz kuzatishni boshlang.",
     "name": "To'liq ism",

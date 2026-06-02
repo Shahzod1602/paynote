@@ -134,7 +134,7 @@ export function AuthCard({ mode, locale, dict }: { mode: Mode; locale: Locale; d
             Track every debt.<br />Get paid on time.
           </p>
           <p className="mt-4 max-w-sm text-brand-100">
-            Join 5,000+ businesses replacing paper notebooks with cash.identify.uz.
+            Join 5,000+ businesses replacing paper notebooks with Paynote.
           </p>
 
           <div className="mt-10 max-w-sm rounded-card border border-white/20 bg-white/10 p-5 backdrop-blur">

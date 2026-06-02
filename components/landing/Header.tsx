@@ -45,7 +45,7 @@ export function Header({ locale, nav }: { locale: Locale; nav: Nav }) {
       )}
     >
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link href={localePath(locale)} aria-label="cash.identify.uz">
+        <Link href={localePath(locale)} aria-label="Paynote">
           <Logo />
         </Link>
 

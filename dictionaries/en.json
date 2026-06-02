@@ -1,9 +1,9 @@
 {
   "meta": {
-    "title": "cash.identify.uz — Debt ledger & installment sales app",
+    "title": "Paynote — Debt ledger & installment sales app",
     "description": "Track customer debts without paper notebooks. Automated SMS reminders, multi-store support and reports for small businesses in Uzbekistan."
   },
-  "brand": { "name": "cash.identify.uz" },
+  "brand": { "name": "Paynote" },
   "nav": {
     "how": "How it works",
     "features": "Features",
@@ -17,7 +17,7 @@
     "badge": "5,000+ businesses trust us",
     "title": "Struggling with debt tracking & installments?",
     "titleAccent": "Try the simple solution",
-    "subtitle": "cash.identify.uz is a debt ledger and installment sales app. Track who owes you without paper notebooks — with automated SMS reminders.",
+    "subtitle": "Paynote is a debt ledger and installment sales app. Track who owes you without paper notebooks — with automated SMS reminders.",
     "ctaPrimary": "Try it now",
     "ctaSecondary": "How it works",
     "stat1": "5,000+",
@@ -32,7 +32,7 @@
     "subtitle": "From download to full control of your debts — in minutes.",
     "items": [
       { "title": "Download the app", "text": "Available on the App Store and Play Market for free." },
-      { "title": "Register", "text": "Create an account and unlock all of cash.identify.uz's features." },
+      { "title": "Register", "text": "Create an account and unlock all of Paynote's features." },
       { "title": "Keep accounts", "text": "Record daily sales and debts — securely synced online." },
       { "title": "Monitor debts", "text": "See who owes you, what you owe, and get paid on time." }
     ]
@@ -92,12 +92,12 @@
   },
   "faq": {
     "title": "Frequently asked questions",
-    "subtitle": "Everything you need to know about cash.identify.uz.",
+    "subtitle": "Everything you need to know about Paynote.",
     "items": [
-      { "q": "Do I need internet to use cash.identify.uz?", "a": "You can record transactions offline. Data automatically syncs once you reconnect." },
-      { "q": "How do SMS reminders work?", "a": "cash.identify.uz sends automated SMS and voice reminders to customers based on their payment schedule, so you never have to chase debts manually." },
+      { "q": "Do I need internet to use Paynote?", "a": "You can record transactions offline. Data automatically syncs once you reconnect." },
+      { "q": "How do SMS reminders work?", "a": "Paynote sends automated SMS and voice reminders to customers based on their payment schedule, so you never have to chase debts manually." },
       { "q": "Can I manage more than one store?", "a": "Yes. With paid plans you can manage multiple stores and seller accounts from a single dashboard." },
-      { "q": "Which currencies are supported?", "a": "cash.identify.uz supports UZS and USD, so you can keep balances in the currency that suits your business." },
+      { "q": "Which currencies are supported?", "a": "Paynote supports UZS and USD, so you can keep balances in the currency that suits your business." },
       { "q": "Is my data safe?", "a": "Your data is stored securely in the cloud and backed up automatically. Only you and the sellers you invite can access it." },
       { "q": "How do I get started?", "a": "Download the app, register for a free account, and start adding your customers and debts in minutes." }
     ]
@@ -129,7 +129,7 @@
   },
   "auth": {
     "loginTitle": "Welcome back",
-    "loginSubtitle": "Log in to your cash.identify.uz account.",
+    "loginSubtitle": "Log in to your Paynote account.",
     "registerTitle": "Create your account",
     "registerSubtitle": "Start tracking debts in minutes.",
     "name": "Full name",

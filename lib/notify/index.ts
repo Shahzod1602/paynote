@@ -25,13 +25,13 @@ export function buildReminderText(opts: {
     return (
       `Dear ${opts.name}, you have an outstanding debt of ${amount}` +
       (due ? ` (due ${due})` : "") +
-      `. Please settle it at your earliest convenience. — cash.identify.uz`
+      `. Please settle it at your earliest convenience. — Paynote`
     );
   }
   return (
     `Hurmatli ${opts.name}, sizda ${amount} miqdorida qarz bor` +
     (due ? ` (muddati: ${due})` : "") +
-    `. Iltimos, imkon qadar tezroq to'lab qo'ying. — cash.identify.uz`
+    `. Iltimos, imkon qadar tezroq to'lab qo'ying. — Paynote`
   );
 }
 
