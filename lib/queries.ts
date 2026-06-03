@@ -247,6 +247,54 @@ export async function getSmsBalance(businessId: string): Promise<number> {
   return b?.smsBalance ?? 0;
 }
 
+export type MonthlyPoint = { key: string; borrowed: number; paid: number };
+
+function ymKey(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+}
+
+/** Monthly borrowed (debts created) vs paid (payments) for the last N months. */
+export async function getMonthlyReport(businessId: string, months = 12): Promise<MonthlyPoint[]> {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), now.getMonth() - (months - 1), 1);
+
+  const [debts, payments] = await Promise.all([
+    prisma.debt.findMany({
+      where: { businessId, createdAt: { gte: start } },
+      select: { amount: true, createdAt: true },
+    }),
+    prisma.payment.findMany({
+      where: { debt: { businessId }, paidAt: { gte: start } },
+      select: { amount: true, paidAt: true },
+    }),
+  ]);
+
+  const buckets = new Map<string, MonthlyPoint>();
+  for (let i = 0; i < months; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth() - (months - 1) + i, 1);
+    buckets.set(ymKey(d), { key: ymKey(d), borrowed: 0, paid: 0 });
+  }
+  for (const d of debts) {
+    const b = buckets.get(ymKey(d.createdAt));
+    if (b) b.borrowed += num(d.amount);
+  }
+  for (const p of payments) {
+    const b = buckets.get(ymKey(p.paidAt));
+    if (b) b.paid += num(p.amount);
+  }
+  return [...buckets.values()];
+}
+
+export type ProductView = { id: string; name: string; price: number };
+
+export async function getProducts(businessId: string): Promise<ProductView[]> {
+  const rows = await prisma.product.findMany({
+    where: { businessId },
+    orderBy: { createdAt: "desc" },
+  });
+  return rows.map((p) => ({ id: p.id, name: p.name, price: num(p.price) }));
+}
+
 export type TemplateType = "REMINDER" | "OVERDUE" | "PAYMENT" | "CUSTOM";
 export type TemplateStatus = "PENDING" | "APPROVED" | "REJECTED";
 

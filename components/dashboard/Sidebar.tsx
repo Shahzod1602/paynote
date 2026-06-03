@@ -12,6 +12,7 @@ type NavDict = {
   overview: string;
   customers: string;
   debts: string;
+  products: string;
   templates: string;
   messages: string;
   reports: string;
@@ -29,6 +30,7 @@ const icons: Record<string, React.ReactNode> = {
   ),
   debts: <path d="M4 7h16v12H4zM4 11h16M8 15h4" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" strokeLinecap="round" />,
   messages: <path d="M4 5h16v11H9l-4 3v-3H4z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" strokeLinecap="round" />,
+  products: <path d="M4 8l8-4 8 4v8l-8 4-8-4zM4 8l8 4m0 0 8-4m-8 4v8" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" strokeLinecap="round" />,
   templates: <path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h7" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" strokeLinecap="round" />,
   reports: <path d="M5 19V5m0 14h14M9 16V9m4 7v-4m4 4V7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />,
   settings: (
@@ -47,9 +49,10 @@ export function Sidebar({ locale, nav }: { locale: Locale; nav: NavDict }) {
     { key: "overview", href: "/dashboard", label: nav.overview },
     { key: "customers", href: "/dashboard/customers", label: nav.customers },
     { key: "debts", href: "/dashboard/debts", label: nav.debts },
+    { key: "products", href: "/dashboard/products", label: nav.products },
     { key: "templates", href: "/dashboard/templates", label: nav.templates },
     { key: "messages", href: "/dashboard/messages", label: nav.messages },
-    { key: "reports", href: "/dashboard", label: nav.reports },
+    { key: "reports", href: "/dashboard/reports", label: nav.reports },
     { key: "settings", href: "/dashboard", label: nav.settings },
   ];
 

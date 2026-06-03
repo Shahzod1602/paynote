@@ -151,7 +151,39 @@
     "demoFill": "Demo hisob bilan kirish"
   },
   "dashboard": {
-    "nav": { "overview": "Umumiy", "customers": "Mijozlar", "debts": "Qarzlar", "templates": "Shablonlar", "messages": "SMS", "reports": "Hisobotlar", "settings": "Sozlamalar", "logout": "Chiqish" },
+    "nav": { "overview": "Umumiy", "customers": "Mijozlar", "debts": "Qarzlar", "products": "Mahsulotlar", "templates": "Shablonlar", "messages": "SMS", "reports": "Hisobotlar", "settings": "Sozlamalar", "logout": "Chiqish" },
+    "products": {
+      "title": "Mahsulotlar",
+      "subtitle": "Mahsulot narxlari ro'yxati. Qarz qo'shishda tanlanadi — narx avtomatik to'ladi.",
+      "add": "Mahsulot qo'shish",
+      "empty": "Hali mahsulot yo'q. Birinchisini qo'shing.",
+      "name": "Nomi",
+      "price": "Narxi",
+      "namePlaceholder": "Masalan: Muzlatgich",
+      "pricePlaceholder": "1500000",
+      "save": "Saqlash",
+      "cancel": "Bekor qilish",
+      "edit": "Tahrirlash",
+      "delete": "O'chirish",
+      "deleteConfirm": "Bu mahsulot o'chirilsinmi?",
+      "saving": "Saqlanmoqda...",
+      "error": "Nomi va narxi to'g'ri kiritilishi shart.",
+      "newProduct": "Yangi mahsulot",
+      "editProduct": "Mahsulotni tahrirlash",
+      "select": "Mahsulot (ixtiyoriy)",
+      "selectNone": "— tanlanmagan —"
+    },
+    "reports": {
+      "title": "Hisobotlar",
+      "subtitle": "Oylar bo'yicha qarz va to'lovlar dinamikasi.",
+      "chartTitle": "Oylik dinamika (so'nggi 12 oy)",
+      "borrowed": "Qarz qo'shildi",
+      "paid": "To'landi",
+      "net": "Sof (qarz − to'lov)",
+      "month": "Oy",
+      "total": "Jami",
+      "empty": "Ma'lumot yo'q."
+    },
     "topbar": { "search": "ID, ism yoki telefon bo'yicha qidirish", "wallet": "SMS balans", "myAccount": "Mening hisobim", "business": "Biznes" },
     "profile": {
       "back": "Mijozlar",

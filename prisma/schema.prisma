@@ -26,7 +26,17 @@ model Business {
   customers  Customer[]
   debts      Debt[]
   templates  MessageTemplate[]
+  products   Product[]
   createdAt  DateTime          @default(now())
+}
+
+model Product {
+  id         String   @id @default(cuid())
+  name       String
+  price      Decimal  @db.Decimal(14, 2)
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
 }
 
 enum TemplateType {

@@ -7,7 +7,7 @@ import { createDebt, addPayment, deleteDebt } from "@/lib/actions/debts";
 import { sendReminderAction } from "@/lib/actions/notify";
 import { linkTelegram } from "@/lib/actions/customers";
 import { formatMoney, formatDate, type Currency } from "@/lib/format";
-import type { DebtView, TemplateOption } from "@/lib/queries";
+import type { DebtView, TemplateOption, ProductView } from "@/lib/queries";
 import type { Locale } from "@/i18n/config";
 
 type FormDict = {
@@ -64,6 +64,9 @@ type Props = {
   debts: DebtView[];
   customers: { id: string; name: string }[];
   templates: TemplateOption[];
+  products: ProductView[];
+  productSelectLabel: string;
+  productNoneLabel: string;
   currency: Currency;
   title: string;
   addLabel: string;
@@ -79,9 +82,10 @@ const badge: Record<string, string> = {
   OVERDUE: "bg-rose-50 text-rose-700",
 };
 
-export function DebtsClient({ locale, debts, customers, templates, currency, title, addLabel, emptyLabel, table, status, form }: Props) {
+export function DebtsClient({ locale, debts, customers, templates, products, productSelectLabel, productNoneLabel, currency, title, addLabel, emptyLabel, table, status, form }: Props) {
   const router = useRouter();
   const [debtOpen, setDebtOpen] = useState(false);
+  const [debtAmount, setDebtAmount] = useState("");
   const [payDebt, setPayDebt] = useState<DebtView | null>(null);
   const [reminderDebt, setReminderDebt] = useState<DebtView | null>(null);
   const [reminderMsg, setReminderMsg] = useState<{ kind: "ok" | "info" | "err"; text: string } | null>(null);
@@ -216,6 +220,7 @@ export function DebtsClient({ locale, debts, customers, templates, currency, tit
         <button
           onClick={() => {
             setError(null);
+            setDebtAmount("");
             setDebtOpen(true);
           }}
           disabled={customers.length === 0}
@@ -321,7 +326,42 @@ export function DebtsClient({ locale, debts, customers, templates, currency, tit
               ))}
             </select>
           </label>
-          <Input label={form.amount} name="amount" type="text" inputMode="numeric" required placeholder="500000" />
+
+          {products.length > 0 && (
+            <label className="block">
+              <span className="mb-1.5 block text-sm font-medium text-ink">{productSelectLabel}</span>
+              <select
+                defaultValue=""
+                onChange={(e) => {
+                  const p = products.find((x) => x.id === e.target.value);
+                  if (p) setDebtAmount(String(p.price));
+                }}
+                className="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm text-ink outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100"
+              >
+                <option value="">{productNoneLabel}</option>
+                {products.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name} — {formatMoney(p.price, currency)}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+
+          <label className="block">
+            <span className="mb-1.5 block text-sm font-medium text-ink">{form.amount}</span>
+            <input
+              name="amount"
+              type="text"
+              inputMode="numeric"
+              required
+              value={debtAmount}
+              onChange={(e) => setDebtAmount(e.target.value)}
+              onWheel={(e) => (e.target as HTMLInputElement).blur()}
+              placeholder="500000"
+              className="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition placeholder:text-muted/60 focus:border-brand-400 focus:ring-2 focus:ring-brand-100"
+            />
+          </label>
           <Input label={form.dueDate} name="dueDate" type="date" />
           <Input label={form.note} name="note" placeholder="..." />
           {error && <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</p>}

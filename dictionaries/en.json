@@ -151,7 +151,39 @@
     "demoFill": "Log in with demo account"
   },
   "dashboard": {
-    "nav": { "overview": "Overview", "customers": "Customers", "debts": "Debts", "templates": "Templates", "messages": "SMS", "reports": "Reports", "settings": "Settings", "logout": "Log out" },
+    "nav": { "overview": "Overview", "customers": "Customers", "debts": "Debts", "products": "Products", "templates": "Templates", "messages": "SMS", "reports": "Reports", "settings": "Settings", "logout": "Log out" },
+    "products": {
+      "title": "Products",
+      "subtitle": "Your product price list. Pick one when adding a debt — the price auto-fills.",
+      "add": "Add product",
+      "empty": "No products yet. Add your first one.",
+      "name": "Name",
+      "price": "Price",
+      "namePlaceholder": "e.g. Refrigerator",
+      "pricePlaceholder": "1500000",
+      "save": "Save",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleteConfirm": "Delete this product?",
+      "saving": "Saving...",
+      "error": "Name and a valid price are required.",
+      "newProduct": "New product",
+      "editProduct": "Edit product",
+      "select": "Product (optional)",
+      "selectNone": "— none —"
+    },
+    "reports": {
+      "title": "Reports",
+      "subtitle": "Monthly debt and payment dynamics.",
+      "chartTitle": "Monthly dynamics (last 12 months)",
+      "borrowed": "Debt added",
+      "paid": "Paid",
+      "net": "Net (debt − paid)",
+      "month": "Month",
+      "total": "Total",
+      "empty": "No data."
+    },
     "topbar": { "search": "Search by ID, name or phone", "wallet": "SMS balance", "myAccount": "My account", "business": "Business" },
     "profile": {
       "back": "Customers",
