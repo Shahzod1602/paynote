@@ -6,7 +6,7 @@ import { Modal } from "@/components/ui/Modal";
 import { createDebt, addPayment, deleteDebt } from "@/lib/actions/debts";
 import { sendReminderAction } from "@/lib/actions/notify";
 import { linkTelegram } from "@/lib/actions/customers";
-import { formatUZS, formatDate } from "@/lib/format";
+import { formatMoney, formatDate, type Currency } from "@/lib/format";
 import type { DebtView, TemplateOption } from "@/lib/queries";
 import type { Locale } from "@/i18n/config";
 
@@ -64,6 +64,7 @@ type Props = {
   debts: DebtView[];
   customers: { id: string; name: string }[];
   templates: TemplateOption[];
+  currency: Currency;
   title: string;
   addLabel: string;
   emptyLabel: string;
@@ -78,7 +79,7 @@ const badge: Record<string, string> = {
   OVERDUE: "bg-rose-50 text-rose-700",
 };
 
-export function DebtsClient({ locale, debts, customers, templates, title, addLabel, emptyLabel, table, status, form }: Props) {
+export function DebtsClient({ locale, debts, customers, templates, currency, title, addLabel, emptyLabel, table, status, form }: Props) {
   const router = useRouter();
   const [debtOpen, setDebtOpen] = useState(false);
   const [payDebt, setPayDebt] = useState<DebtView | null>(null);
@@ -254,8 +255,8 @@ export function DebtsClient({ locale, debts, customers, templates, title, addLab
                       <p className="font-medium text-ink">{d.customerName}</p>
                       {d.note && <p className="text-xs text-muted">{d.note}</p>}
                     </td>
-                    <td className="px-5 py-3.5 font-semibold text-ink">{formatUZS(d.amount)}</td>
-                    <td className="px-5 py-3.5 font-semibold text-ink">{formatUZS(d.balance)}</td>
+                    <td className="px-5 py-3.5 font-semibold text-ink">{formatMoney(d.amount, currency)}</td>
+                    <td className="px-5 py-3.5 font-semibold text-ink">{formatMoney(d.balance, currency)}</td>
                     <td className="px-5 py-3.5 text-muted">{formatDate(d.dueDate)}</td>
                     <td className="px-5 py-3.5">
                       <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${badge[d.status]}`}>
@@ -335,7 +336,7 @@ export function DebtsClient({ locale, debts, customers, templates, title, addLab
             <div className="rounded-xl bg-surface px-4 py-3 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted">{payDebt.customerName}</span>
-                <span className="font-semibold text-ink">{formatUZS(payDebt.balance)}</span>
+                <span className="font-semibold text-ink">{formatMoney(payDebt.balance, currency)}</span>
               </div>
             </div>
             <Input
@@ -360,7 +361,7 @@ export function DebtsClient({ locale, debts, customers, templates, title, addLab
             <div className="rounded-xl bg-surface px-4 py-3 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted">{reminderDebt.customerName}</span>
-                <span className="font-semibold text-ink">{formatUZS(reminderDebt.balance)}</span>
+                <span className="font-semibold text-ink">{formatMoney(reminderDebt.balance, currency)}</span>
               </div>
             </div>
             <label className="block">

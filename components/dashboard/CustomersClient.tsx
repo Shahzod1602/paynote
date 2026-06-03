@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Modal } from "@/components/ui/Modal";
 import { createCustomer, updateCustomer, deleteCustomer } from "@/lib/actions/customers";
-import { formatUZS } from "@/lib/format";
+import { formatMoney, type Currency } from "@/lib/format";
 import type { CustomerView } from "@/lib/queries";
 import type { Locale } from "@/i18n/config";
+import { localePath } from "@/lib/utils";
 
 type FormDict = {
   newCustomer: string;
@@ -19,6 +21,7 @@ type FormDict = {
   save: string;
   cancel: string;
   edit: string;
+  view: string;
   delete: string;
   deleteConfirm: string;
   saving: string;
@@ -32,15 +35,42 @@ type Props = {
   addLabel: string;
   amountLabel: string;
   emptyLabel: string;
+  searchPlaceholder: string;
+  noResults: string;
+  currency: Currency;
+  initialQuery: string;
   form: FormDict;
 };
 
-export function CustomersClient({ locale, customers, title, addLabel, amountLabel, emptyLabel, form }: Props) {
+export function CustomersClient({
+  locale,
+  customers,
+  title,
+  addLabel,
+  amountLabel,
+  emptyLabel,
+  searchPlaceholder,
+  noResults,
+  currency,
+  initialQuery,
+  form,
+}: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<CustomerView | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [q, setQ] = useState(initialQuery);
   const [pending, startTransition] = useTransition();
+
+  const term = q.trim().toLowerCase();
+  const filtered = term
+    ? customers.filter(
+        (c) =>
+          c.name.toLowerCase().includes(term) ||
+          (c.phone ?? "").toLowerCase().replace(/\s/g, "").includes(term.replace(/\s/g, "")) ||
+          c.code.toLowerCase().includes(term)
+      )
+    : customers;
 
   function openNew() {
     setEditing(null);
@@ -95,33 +125,72 @@ export function CustomersClient({ locale, customers, title, addLabel, amountLabe
         </button>
       </div>
 
+      {customers.length > 0 && (
+        <div className="relative max-w-md">
+          <svg viewBox="0 0 24 24" fill="none" className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" aria-hidden>
+            <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.7" />
+            <path d="m20 20-3-3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+          </svg>
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder={searchPlaceholder}
+            className="w-full rounded-full border border-line bg-white py-2.5 pl-10 pr-9 text-sm text-ink outline-none transition placeholder:text-muted/70 focus:border-brand-400 focus:ring-2 focus:ring-brand-100"
+          />
+          {q && (
+            <button
+              onClick={() => setQ("")}
+              aria-label="Clear"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-ink"
+            >
+              <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4">
+                <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+              </svg>
+            </button>
+          )}
+        </div>
+      )}
+
       {customers.length === 0 ? (
         <p className="rounded-card border border-dashed border-line bg-white p-10 text-center text-sm text-muted">
           {emptyLabel}
         </p>
+      ) : filtered.length === 0 ? (
+        <p className="rounded-card border border-dashed border-line bg-white p-10 text-center text-sm text-muted">
+          {noResults}
+        </p>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {customers.map((c) => (
-            <div key={c.id} className="group rounded-card border border-line bg-white p-5 shadow-soft">
-              <div className="flex items-center gap-3">
+          {filtered.map((c) => (
+            <div key={c.id} className="group rounded-card border border-line bg-white p-5 shadow-soft transition hover:border-brand-200 hover:shadow-pop">
+              <Link href={localePath(locale, `/dashboard/customers/${c.id}`)} className="flex items-center gap-3">
                 <span className="grid h-11 w-11 place-items-center rounded-full bg-brand-100 text-base font-bold text-brand-700">
                   {c.name.charAt(0)}
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-semibold text-ink">{c.name}</p>
+                  <p className="truncate font-semibold text-ink transition group-hover:text-brand-700">{c.name}</p>
                   <p className="text-sm text-muted">{c.phone || "—"}</p>
                 </div>
-              </div>
+                <span className="rounded-md bg-surface px-2 py-1 font-mono text-[0.7rem] font-semibold tracking-wide text-muted">
+                  #{c.code}
+                </span>
+              </Link>
               <div className="mt-4 flex items-center justify-between border-t border-line pt-3">
                 <span className="text-sm text-muted">{amountLabel}</span>
-                <span className={`text-sm font-bold ${c.balance === 0 ? "text-emerald-600" : "text-ink"}`}>
-                  {formatUZS(c.balance)}
+                <span className={`text-sm font-bold tabular-nums ${c.balance === 0 ? "text-emerald-600" : "text-ink"}`}>
+                  {formatMoney(c.balance, currency)}
                 </span>
               </div>
               <div className="mt-3 flex gap-2">
+                <Link
+                  href={localePath(locale, `/dashboard/customers/${c.id}`)}
+                  className="flex-1 rounded-lg border border-line px-3 py-1.5 text-center text-xs font-medium text-ink transition hover:border-brand-300 hover:text-brand-700"
+                >
+                  {form.view}
+                </Link>
                 <button
                   onClick={() => openEdit(c)}
-                  className="flex-1 rounded-lg border border-line px-3 py-1.5 text-xs font-medium text-ink transition hover:border-brand-300 hover:text-brand-700"
+                  className="rounded-lg border border-line px-3 py-1.5 text-xs font-medium text-ink transition hover:border-brand-300 hover:text-brand-700"
                 >
                   {form.edit}
                 </button>

@@ -20,6 +20,7 @@ export type DebtView = {
 
 export type CustomerView = {
   id: string;
+  code: string;
   name: string;
   phone: string | null;
   note: string | null;
@@ -27,6 +28,11 @@ export type CustomerView = {
   balance: number;
   debtCount: number;
 };
+
+/** Short, human-friendly customer code derived from the cuid. */
+export function customerCode(id: string): string {
+  return id.slice(-6).toUpperCase();
+}
 
 function num(value: unknown): number {
   return typeof value === "object" && value !== null && "toNumber" in value
@@ -84,6 +90,7 @@ export async function getCustomers(businessId: string): Promise<CustomerView[]> 
     }
     return {
       id: c.id,
+      code: customerCode(c.id),
       name: c.name,
       phone: c.phone,
       note: c.note,
@@ -92,6 +99,84 @@ export async function getCustomers(businessId: string): Promise<CustomerView[]> 
       debtCount: c.debts.length,
     };
   });
+}
+
+export type CustomerProfile = {
+  id: string;
+  code: string;
+  name: string;
+  phone: string | null;
+  note: string | null;
+  telegramChatId: string | null;
+  balance: number;
+  totalBorrowed: number;
+  totalPaid: number;
+  createdAt: string;
+  debts: DebtView[];
+  messages: MessageLogView[];
+};
+
+/** Full profile for one customer: totals, debts and message history. */
+export async function getCustomerProfile(
+  businessId: string,
+  customerId: string
+): Promise<CustomerProfile | null> {
+  const c = await prisma.customer.findFirst({
+    where: { id: customerId, businessId },
+    include: {
+      debts: { include: { payments: true }, orderBy: { createdAt: "desc" } },
+      messages: { orderBy: { createdAt: "desc" }, take: 50 },
+    },
+  });
+  if (!c) return null;
+
+  let totalBorrowed = 0;
+  let totalPaid = 0;
+  const debts: DebtView[] = c.debts.map((d) => {
+    const amount = num(d.amount);
+    const paid = d.payments.reduce((s, p) => s + num(p.amount), 0);
+    const balance = Math.max(amount - paid, 0);
+    totalBorrowed += amount;
+    totalPaid += paid;
+    return {
+      id: d.id,
+      customerId: c.id,
+      customerName: c.name,
+      customerTelegramChatId: c.telegramChatId,
+      amount,
+      paid,
+      balance,
+      currency: d.currency,
+      dueDate: d.dueDate ? d.dueDate.toISOString() : null,
+      note: d.note,
+      status: computeStatus(balance, d.dueDate),
+      createdAt: d.createdAt.toISOString(),
+    };
+  });
+
+  return {
+    id: c.id,
+    code: customerCode(c.id),
+    name: c.name,
+    phone: c.phone,
+    note: c.note,
+    telegramChatId: c.telegramChatId,
+    balance: Math.max(totalBorrowed - totalPaid, 0),
+    totalBorrowed,
+    totalPaid,
+    createdAt: c.createdAt.toISOString(),
+    debts,
+    messages: c.messages.map((m) => ({
+      id: m.id,
+      channel: m.channel,
+      status: m.status,
+      recipient: m.recipient,
+      text: m.text,
+      error: m.error,
+      customerName: c.name,
+      createdAt: m.createdAt.toISOString(),
+    })),
+  };
 }
 
 export type DashboardStats = {

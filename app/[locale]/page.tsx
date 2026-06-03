@@ -20,7 +20,7 @@ export default async function LandingPage({
   const dict = await getDictionary(locale);
 
   return (
-    <>
+    <div className="min-h-screen bg-paper text-ledger selection:bg-leaf selection:text-paper">
       <Header locale={locale} nav={dict.nav} />
       <main>
         <Hero locale={locale} dict={dict.hero} />
@@ -31,6 +31,6 @@ export default async function LandingPage({
         <CtaBand locale={locale} dict={dict.cta} />
       </main>
       <Footer locale={locale} dict={dict.footer} />
-    </>
+    </div>
   );
 }

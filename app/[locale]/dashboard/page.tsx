@@ -3,7 +3,8 @@ import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { getCurrentUser } from "@/lib/user";
 import { getDashboardStats, getRecentDebts } from "@/lib/queries";
-import { formatUZS, formatDate } from "@/lib/format";
+import { getServerCurrency } from "@/lib/currency";
+import { formatMoney, formatDate } from "@/lib/format";
 
 export default async function DashboardOverview({
   params,
@@ -19,16 +20,17 @@ export default async function DashboardOverview({
   const businessId = user?.businesses[0]?.id;
   if (!user || !businessId) redirect(`/${locale}/login`);
 
-  const [stats, recent] = await Promise.all([
+  const [stats, recent, currency] = await Promise.all([
     getDashboardStats(businessId),
     getRecentDebts(businessId, 6),
+    getServerCurrency(),
   ]);
 
   const cards = [
-    { label: d.stats.totalDebt, value: formatUZS(stats.totalOutstanding), accent: "text-ink" },
+    { label: d.stats.totalDebt, value: formatMoney(stats.totalOutstanding, currency), accent: "text-ink" },
     { label: d.stats.customers, value: String(stats.customers), accent: "text-ink" },
-    { label: d.stats.overdue, value: formatUZS(stats.overdue), accent: "text-rose-600" },
-    { label: d.stats.collected, value: formatUZS(stats.collectedThisMonth), accent: "text-emerald-600" },
+    { label: d.stats.overdue, value: formatMoney(stats.overdue, currency), accent: "text-rose-600" },
+    { label: d.stats.collected, value: formatMoney(stats.collectedThisMonth, currency), accent: "text-emerald-600" },
   ];
 
   const badge: Record<string, string> = {
@@ -88,7 +90,7 @@ export default async function DashboardOverview({
                         <span className="font-medium text-ink">{r.customerName}</span>
                       </div>
                     </td>
-                    <td className="px-5 py-3.5 font-semibold text-ink">{formatUZS(r.balance)}</td>
+                    <td className="px-5 py-3.5 font-semibold text-ink">{formatMoney(r.balance, currency)}</td>
                     <td className="px-5 py-3.5 text-muted">{formatDate(r.dueDate)}</td>
                     <td className="px-5 py-3.5">
                       <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${badge[r.status]}`}>
