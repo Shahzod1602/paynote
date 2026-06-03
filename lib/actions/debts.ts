@@ -30,9 +30,15 @@ async function refreshStatus(debtId: string) {
   await prisma.debt.update({ where: { id: debtId }, data: { status } });
 }
 
+// Accepts "500000", "500 000", "500,000" — strips non-digits before parsing.
+const amountField = z.preprocess(
+  (v) => Number(String(v ?? "").replace(/[^\d.]/g, "")),
+  z.number().positive()
+);
+
 const debtSchema = z.object({
   customerId: z.string().min(1),
-  amount: z.coerce.number().positive(),
+  amount: amountField,
   dueDate: z.string().optional(),
   note: z.string().trim().optional(),
 });
@@ -74,7 +80,7 @@ export async function createDebt(formData: FormData): Promise<ActionResult> {
 
 const paymentSchema = z.object({
   debtId: z.string().min(1),
-  amount: z.coerce.number().positive(),
+  amount: amountField,
 });
 
 export async function addPayment(formData: FormData): Promise<ActionResult> {

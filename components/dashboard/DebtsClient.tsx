@@ -321,7 +321,7 @@ export function DebtsClient({ locale, debts, customers, templates, currency, tit
               ))}
             </select>
           </label>
-          <Input label={form.amount} name="amount" type="number" min="1" step="1000" required placeholder="500000" />
+          <Input label={form.amount} name="amount" type="text" inputMode="numeric" required placeholder="500000" />
           <Input label={form.dueDate} name="dueDate" type="date" />
           <Input label={form.note} name="note" placeholder="..." />
           {error && <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</p>}
@@ -342,9 +342,8 @@ export function DebtsClient({ locale, debts, customers, templates, currency, tit
             <Input
               label={form.paymentAmount}
               name="amount"
-              type="number"
-              min="1"
-              step="1000"
+              type="text"
+              inputMode="numeric"
               required
               defaultValue={String(payDebt.balance)}
             />
@@ -480,8 +479,7 @@ function Input({
   type = "text",
   placeholder,
   required,
-  min,
-  step,
+  inputMode,
   defaultValue,
 }: {
   label: string;
@@ -489,8 +487,7 @@ function Input({
   type?: string;
   placeholder?: string;
   required?: boolean;
-  min?: string;
-  step?: string;
+  inputMode?: "numeric" | "text";
   defaultValue?: string;
 }) {
   return (
@@ -499,11 +496,12 @@ function Input({
       <input
         name={name}
         type={type}
+        inputMode={inputMode}
         placeholder={placeholder}
         required={required}
-        min={min}
-        step={step}
         defaultValue={defaultValue}
+        // Manual entry only — block mouse-wheel from changing numeric fields.
+        onWheel={(e) => (e.target as HTMLInputElement).blur()}
         className="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition placeholder:text-muted/60 focus:border-brand-400 focus:ring-2 focus:ring-brand-100"
       />
     </label>
