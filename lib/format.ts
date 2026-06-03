@@ -4,7 +4,7 @@ export type Currency = "UZS" | "USD";
 export const USD_RATE = 12600;
 
 export function formatUZS(amount: number): string {
-  return "₸ " + new Intl.NumberFormat("ru-RU").format(Math.round(amount));
+  return new Intl.NumberFormat("ru-RU").format(Math.round(amount)) + " so'm";
 }
 
 /** Formats a UZS amount in the chosen display currency. */

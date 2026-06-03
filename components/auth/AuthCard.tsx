@@ -139,7 +139,7 @@ export function AuthCard({ mode, locale, dict }: { mode: Mode; locale: Locale; d
 
           <div className="mt-10 max-w-sm rounded-card border border-white/20 bg-white/10 p-5 backdrop-blur">
             <p className="text-sm text-brand-100">Total outstanding</p>
-            <p className="text-2xl font-extrabold">₸ 5 410 000</p>
+            <p className="text-2xl font-extrabold">5 410 000 so&apos;m</p>
             <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/20">
               <div className="h-full w-2/3 rounded-full bg-white" />
             </div>

@@ -106,7 +106,7 @@ function HeroMock() {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm text-muted">Total outstanding</p>
-            <p className="text-3xl font-extrabold tracking-tight text-ink">₸ 5 410 000</p>
+            <p className="text-3xl font-extrabold tracking-tight text-ink">5 410 000 so&apos;m</p>
           </div>
           <span className="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand-600">
             <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6">
@@ -124,7 +124,7 @@ function HeroMock() {
               </span>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-semibold text-ink">{r.name}</p>
-                <p className="text-xs text-muted">₸ {r.amount}</p>
+                <p className="text-xs text-muted">{r.amount} so&apos;m</p>
               </div>
               <span className={`h-2.5 w-2.5 rounded-full ${stateColor[r.state]}`} />
             </div>
