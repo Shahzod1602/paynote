@@ -31,7 +31,7 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex items-center gap-1.5 rounded-full border border-ledger/15 px-3 py-1.5 text-sm font-medium text-ledger transition hover:border-leaf/40 hover:text-leaf"
+        className="inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-sm font-medium text-ink transition hover:border-brand-300 hover:text-brand-700"
         aria-haspopup="listbox"
         aria-expanded={open}
       >
@@ -44,15 +44,15 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
       {open && (
         <ul
           role="listbox"
-          className="absolute right-0 z-50 mt-2 w-40 overflow-hidden rounded-xl border border-rule bg-paper py-1 shadow-ledger"
+          className="absolute right-0 z-50 mt-2 w-40 overflow-hidden rounded-xl border border-line bg-white py-1 shadow-pop"
         >
           {locales.map((l) => (
             <li key={l}>
               <button
                 onClick={() => switchTo(l)}
                 className={cn(
-                  "flex w-full items-center justify-between px-3 py-2 text-sm transition hover:bg-paper-3/60",
-                  l === locale ? "font-semibold text-leaf" : "text-ledger"
+                  "flex w-full items-center justify-between px-3 py-2 text-sm transition hover:bg-surface",
+                  l === locale ? "font-semibold text-brand-700" : "text-ink"
                 )}
               >
                 {localeNames[l]}

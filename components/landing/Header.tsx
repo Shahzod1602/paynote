@@ -41,12 +41,10 @@ export function Header({ locale, nav }: { locale: Locale; nav: Nav }) {
     <header
       className={cn(
         "sticky top-0 z-50 transition-all duration-300",
-        scrolled
-          ? "border-b border-rule bg-paper/85 backdrop-blur-xl"
-          : "border-b border-transparent bg-transparent"
+        scrolled ? "border-b border-line bg-white/80 backdrop-blur-xl" : "bg-transparent"
       )}
     >
-      <nav className="mx-auto flex h-[4.5rem] max-w-6xl items-center justify-between px-4 sm:px-6">
+      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href={localePath(locale)} aria-label="Paynote">
           <Logo />
         </Link>
@@ -56,7 +54,7 @@ export function Header({ locale, nav }: { locale: Locale; nav: Nav }) {
             <a
               key={l.href}
               href={l.href}
-              className="rounded-full px-3.5 py-2 text-sm font-medium text-ledger-soft transition hover:bg-paper-3/60 hover:text-ledger"
+              className="rounded-full px-3.5 py-2 text-sm font-medium text-muted transition hover:bg-surface hover:text-ink"
             >
               {l.label}
             </a>
@@ -67,13 +65,13 @@ export function Header({ locale, nav }: { locale: Locale; nav: Nav }) {
           <LanguageSwitcher locale={locale} />
           <Link
             href={localePath(locale, "/login")}
-            className="rounded-full px-3.5 py-2 text-sm font-semibold text-ledger transition hover:text-leaf"
+            className="rounded-full px-3.5 py-2 text-sm font-semibold text-ink transition hover:text-brand-700"
           >
             {nav.login}
           </Link>
           <Link
             href={localePath(locale, "/register")}
-            className="rounded-full bg-leaf px-5 py-2.5 text-sm font-semibold text-paper shadow-[0_8px_20px_-10px_rgba(28,107,74,0.9)] ring-1 ring-leaf-600/30 transition hover:bg-leaf-600"
+            className="rounded-full bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-soft transition hover:bg-brand-700"
           >
             {nav.cta}
           </Link>
@@ -84,7 +82,7 @@ export function Header({ locale, nav }: { locale: Locale; nav: Nav }) {
           <button
             onClick={() => setOpen((v) => !v)}
             aria-label="Menu"
-            className="grid h-10 w-10 place-items-center rounded-xl border border-rule text-ledger"
+            className="grid h-10 w-10 place-items-center rounded-xl border border-line text-ink"
           >
             <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
               {open ? (
@@ -98,14 +96,14 @@ export function Header({ locale, nav }: { locale: Locale; nav: Nav }) {
       </nav>
 
       {open && (
-        <div className="border-t border-rule bg-paper md:hidden">
+        <div className="border-t border-line bg-white md:hidden">
           <div className="mx-auto max-w-6xl space-y-1 px-4 py-4">
             {links.map((l) => (
               <a
                 key={l.href}
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="block rounded-xl px-3 py-3 text-base font-medium text-ledger hover:bg-paper-3/60"
+                className="block rounded-xl px-3 py-3 text-base font-medium text-ink hover:bg-surface"
               >
                 {l.label}
               </a>
@@ -113,13 +111,13 @@ export function Header({ locale, nav }: { locale: Locale; nav: Nav }) {
             <div className="grid grid-cols-2 gap-2 pt-2">
               <Link
                 href={localePath(locale, "/login")}
-                className="rounded-xl border border-rule px-4 py-3 text-center text-sm font-semibold text-ledger"
+                className="rounded-xl border border-line px-4 py-3 text-center text-sm font-semibold text-ink"
               >
                 {nav.login}
               </Link>
               <Link
                 href={localePath(locale, "/register")}
-                className="rounded-xl bg-leaf px-4 py-3 text-center text-sm font-semibold text-paper"
+                className="rounded-xl bg-brand-600 px-4 py-3 text-center text-sm font-semibold text-white"
               >
                 {nav.cta}
               </Link>

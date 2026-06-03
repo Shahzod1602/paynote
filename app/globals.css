@@ -18,30 +18,11 @@
   --color-line: #e7ebf3;
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-fraunces), "Hoefler Text", Georgia, serif;
 
   --radius-card: 1.25rem;
 
   --shadow-soft: 0 1px 2px rgba(15, 23, 42, 0.04), 0 12px 32px -12px rgba(37, 99, 235, 0.18);
   --shadow-pop: 0 24px 60px -24px rgba(37, 99, 235, 0.45);
-
-  /* ── Landing "Modern Ledger" palette (warm paper + ink + money-green + gold) ── */
-  --color-paper: #f4ecda;
-  --color-paper-2: #efe5cf;
-  --color-paper-3: #e7dabd;
-  --color-ledger: #221d12;       /* warm near-black ink */
-  --color-ledger-soft: #6f6342;  /* sepia muted */
-  --color-rule: #d8c9a4;         /* ruled line */
-  --color-rule-soft: #e4d8bb;
-  --color-leaf: #1c6b4a;         /* money green */
-  --color-leaf-600: #15583c;
-  --color-leaf-50: #e7efe5;
-  --color-gold: #a87a1c;         /* ledger gold */
-  --color-gold-soft: #ecdcb2;
-  --color-clay: #b1502b;         /* overdue terracotta */
-
-  --shadow-ledger: 0 2px 0 rgba(34, 29, 18, 0.05), 0 26px 50px -28px rgba(34, 29, 18, 0.45);
-  --shadow-stamp: 0 10px 30px -12px rgba(28, 107, 74, 0.5);
 }
 
 :root {
@@ -82,63 +63,4 @@ body {
 }
 .animate-float-up {
   animation: float-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-/* ── Landing "Modern Ledger" textures & helpers ── */
-
-/* Ruled accounting paper: horizontal rules + a faint warm wash. */
-.bg-ledger-lines {
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0,
-    transparent 31px,
-    rgba(34, 29, 18, 0.07) 31px,
-    rgba(34, 29, 18, 0.07) 32px
-  );
-}
-
-/* Dotted ledger grid, masked to fade out. */
-.bg-ledger-dots {
-  background-image: radial-gradient(rgba(34, 29, 18, 0.13) 1px, transparent 1.4px);
-  background-size: 22px 22px;
-  -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 0%, #000 35%, transparent 100%);
-  mask-image: radial-gradient(ellipse 75% 70% at 50% 0%, #000 35%, transparent 100%);
-}
-
-/* Subtle paper grain via layered radial gradients. */
-.paper-grain {
-  background-image:
-    radial-gradient(rgba(120, 100, 60, 0.05) 1px, transparent 1px),
-    radial-gradient(rgba(120, 100, 60, 0.04) 1px, transparent 1px);
-  background-size: 7px 7px, 11px 11px;
-  background-position: 0 0, 3px 4px;
-}
-
-/* Hand-drawn ink underline under accent words. */
-.ink-underline {
-  position: relative;
-  display: inline-block;
-}
-.ink-underline::after {
-  content: "";
-  position: absolute;
-  left: -2%;
-  right: -2%;
-  bottom: 0.02em;
-  height: 0.42em;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 24' preserveAspectRatio='none'%3E%3Cpath d='M3 17C56 7 120 6 160 9c44 3 88 6 137 2' fill='none' stroke='%23a87a1c' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  z-index: -1;
-  opacity: 0.85;
-}
-
-/* Wax-seal / rubber-stamp tilt entrance. */
-@keyframes stamp-in {
-  0% { opacity: 0; transform: rotate(-18deg) scale(1.6); }
-  60% { opacity: 1; transform: rotate(-11deg) scale(0.94); }
-  100% { opacity: 1; transform: rotate(-9deg) scale(1); }
-}
-.animate-stamp {
-  animation: stamp-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both;
 }

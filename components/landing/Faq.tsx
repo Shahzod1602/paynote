@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { Eyebrow } from "./Steps";
 
 type FaqDict = {
   title: string;
@@ -14,31 +13,28 @@ export function Faq({ dict }: { dict: FaqDict }) {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="scroll-mt-24 border-y border-rule bg-paper-2 py-24">
+    <section id="faq" className="scroll-mt-20 bg-surface/60 py-20">
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
         <div className="mx-auto max-w-2xl text-center">
-          <Eyebrow>Savol-javob</Eyebrow>
-          <h2 className="mt-4 font-display text-[2.1rem] font-semibold tracking-tight text-ledger sm:text-[2.6rem]">
-            {dict.title}
-          </h2>
-          <p className="mt-3 text-lg text-ledger-soft">{dict.subtitle}</p>
+          <h2 className="text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">{dict.title}</h2>
+          <p className="mt-3 text-lg text-muted">{dict.subtitle}</p>
         </div>
 
-        <div className="mt-12 divide-y divide-rule overflow-hidden rounded-2xl border border-rule bg-paper">
+        <div className="mt-10 space-y-3">
           {dict.items.map((item, i) => {
             const isOpen = open === i;
             return (
-              <div key={item.q}>
+              <div key={item.q} className="overflow-hidden rounded-2xl border border-line bg-white">
                 <button
                   onClick={() => setOpen(isOpen ? null : i)}
-                  className="flex w-full items-center justify-between gap-4 px-5 py-5 text-left transition hover:bg-paper-2/60"
+                  className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
                   aria-expanded={isOpen}
                 >
-                  <span className="font-display text-lg font-semibold text-ledger">{item.q}</span>
+                  <span className="text-base font-semibold text-ink">{item.q}</span>
                   <span
                     className={cn(
-                      "grid h-7 w-7 shrink-0 place-items-center rounded-full border border-rule text-leaf transition-transform",
-                      isOpen && "rotate-45 border-leaf/40 bg-leaf-50"
+                      "grid h-7 w-7 shrink-0 place-items-center rounded-full border border-line text-brand-600 transition-transform",
+                      isOpen && "rotate-45 border-brand-300 bg-brand-50"
                     )}
                   >
                     <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4">
@@ -53,7 +49,7 @@ export function Faq({ dict }: { dict: FaqDict }) {
                   )}
                 >
                   <div className="overflow-hidden">
-                    <p className="px-5 pb-5 text-[0.95rem] leading-relaxed text-ledger-soft">{item.a}</p>
+                    <p className="px-5 pb-5 text-sm leading-relaxed text-muted">{item.a}</p>
                   </div>
                 </div>
               </div>
