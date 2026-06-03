@@ -73,3 +73,61 @@ export const SAMPLE_VARS: TemplateVars = {
   days_passed: "0",
   business_phone: "+998 90 123 45 67",
 };
+
+export type TemplatePreset = {
+  key: string;
+  type: "REMINDER" | "OVERDUE" | "PAYMENT";
+  name: { uz: string; ru: string; en: string };
+  requiresDebt: boolean;
+  requiresDay: boolean;
+  smsEnabled: boolean;
+  bodyUz: string;
+  bodyRu: string;
+  bodyEn: string;
+};
+
+/** 3 ready-made templates — pick one to fill the editor, or write your own. */
+export const TEMPLATE_PRESETS: TemplatePreset[] = [
+  {
+    key: "gentle",
+    type: "REMINDER",
+    name: { uz: "Muloyim eslatma", ru: "Мягкое напоминание", en: "Gentle reminder" },
+    requiresDebt: true,
+    requiresDay: false,
+    smsEnabled: true,
+    bodyUz:
+      "Hurmatli {{client_name}}, {{business_name}} do'konida {{debt_amount}} {{currency}} qarzingiz bor. Iltimos, {{days_to_deadline}} kun ichida to'lab qo'ying. Rahmat!",
+    bodyRu:
+      "Уважаемый(ая) {{client_name}}, у вас задолженность {{debt_amount}} {{currency}} в {{business_name}}. Просьба оплатить в течение {{days_to_deadline}} дней. Спасибо!",
+    bodyEn:
+      "Dear {{client_name}}, you have a debt of {{debt_amount}} {{currency}} at {{business_name}}. Please pay within {{days_to_deadline}} days. Thank you!",
+  },
+  {
+    key: "overdue",
+    type: "OVERDUE",
+    name: { uz: "Muddati o'tgan", ru: "Просроченный платёж", en: "Overdue notice" },
+    requiresDebt: true,
+    requiresDay: false,
+    smsEnabled: true,
+    bodyUz:
+      "Hurmatli {{client_name}}, {{debt_amount}} {{currency}} qarzingiz muddati {{days_passed}} kun oldin o'tgan. Iltimos, imkon qadar tezroq to'lang. — {{business_name}}",
+    bodyRu:
+      "Уважаемый(ая) {{client_name}}, срок оплаты {{debt_amount}} {{currency}} истёк {{days_passed}} дней назад. Просьба погасить как можно скорее. — {{business_name}}",
+    bodyEn:
+      "Dear {{client_name}}, your debt of {{debt_amount}} {{currency}} is {{days_passed}} days overdue. Please pay as soon as possible. — {{business_name}}",
+  },
+  {
+    key: "thanks",
+    type: "PAYMENT",
+    name: { uz: "To'lov uchun rahmat", ru: "Спасибо за оплату", en: "Payment received" },
+    requiresDebt: true,
+    requiresDay: false,
+    smsEnabled: true,
+    bodyUz:
+      "Hurmatli {{client_name}}, to'lovingiz qabul qilindi. Qoldiq qarz: {{client_balance}} {{currency}}. Rahmat! — {{business_name}}",
+    bodyRu:
+      "Уважаемый(ая) {{client_name}}, ваш платёж получен. Остаток долга: {{client_balance}} {{currency}}. Спасибо! — {{business_name}}",
+    bodyEn:
+      "Dear {{client_name}}, your payment has been received. Remaining balance: {{client_balance}} {{currency}}. Thank you! — {{business_name}}",
+  },
+];

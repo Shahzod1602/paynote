@@ -3,9 +3,16 @@
 import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { createTemplate, updateTemplate, deleteTemplate } from "@/lib/actions/templates";
-import { renderTemplate, SAMPLE_VARS, TEMPLATE_VARIABLES } from "@/lib/notify/template";
+import {
+  renderTemplate,
+  SAMPLE_VARS,
+  TEMPLATE_VARIABLES,
+  TEMPLATE_PRESETS,
+  type TemplatePreset,
+} from "@/lib/notify/template";
 import type { TemplateView, TemplateType, TemplateStatus } from "@/lib/queries";
 import type { Locale } from "@/i18n/config";
+import { cn } from "@/lib/utils";
 
 type Lang = "uz" | "ru" | "en";
 
@@ -35,6 +42,8 @@ type TemplatesDict = {
   smsEnabled: string;
   previewSender: string;
   previewEmpty: string;
+  presetsLabel: string;
+  presetsHint: string;
   types: Record<TemplateType, string>;
   statuses: Record<TemplateStatus, string>;
 };
@@ -107,6 +116,16 @@ export function TemplatesClient({ locale, templates, dict }: Props) {
     setSmsEnabled(t.smsEnabled);
     setError(null);
     setOpen(true);
+  }
+
+  function applyPreset(p: TemplatePreset) {
+    setType(p.type);
+    setName(p.name[locale] ?? p.name.uz);
+    setBodies({ uz: p.bodyUz, ru: p.bodyRu, en: p.bodyEn });
+    setRequiresDebt(p.requiresDebt);
+    setRequiresDay(p.requiresDay);
+    setSmsEnabled(p.smsEnabled);
+    setError(null);
   }
 
   function insertVar(v: string) {
@@ -251,6 +270,36 @@ export function TemplatesClient({ locale, templates, dict }: Props) {
             </div>
 
             <div className="mb-4 rounded-xl bg-amber-50 px-4 py-3 text-xs text-amber-800">{dict.moderationNote}</div>
+
+            {!editing && (
+              <div className="mb-5 rounded-xl border border-line bg-surface/50 p-3">
+                <div className="mb-2 flex items-baseline justify-between gap-2">
+                  <span className="text-sm font-semibold text-ink">{dict.presetsLabel}</span>
+                  <span className="text-xs text-muted">{dict.presetsHint}</span>
+                </div>
+                <div className="grid gap-2 sm:grid-cols-3">
+                  {TEMPLATE_PRESETS.map((p) => {
+                    const active = name === (p.name[locale] ?? p.name.uz);
+                    return (
+                      <button
+                        key={p.key}
+                        type="button"
+                        onClick={() => applyPreset(p)}
+                        className={cn(
+                          "rounded-lg border px-3 py-2 text-left transition",
+                          active
+                            ? "border-brand-500 bg-brand-50 ring-1 ring-brand-200"
+                            : "border-line bg-white hover:border-brand-300"
+                        )}
+                      >
+                        <span className="block text-sm font-semibold text-ink">{p.name[locale] ?? p.name.uz}</span>
+                        <span className="mt-0.5 block text-xs text-muted">{dict.types[p.type]}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             <div className="grid gap-5 md:grid-cols-[1fr_280px]">
               {/* Left: form */}

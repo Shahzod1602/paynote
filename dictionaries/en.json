@@ -274,6 +274,8 @@
       "smsEnabled": "Available for SMS sending",
       "previewSender": "4546",
       "previewEmpty": "No text to preview",
+      "presetsLabel": "Ready templates",
+      "presetsHint": "Pick one or write your own",
       "types": { "REMINDER": "Reminder", "OVERDUE": "Overdue", "PAYMENT": "Payment received", "CUSTOM": "Custom" },
       "statuses": { "PENDING": "Pending", "APPROVED": "Approved", "REJECTED": "Rejected" }
     }

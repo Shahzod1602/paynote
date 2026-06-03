@@ -274,6 +274,8 @@
       "smsEnabled": "SMS jo'natmalar uchun mavjud",
       "previewSender": "4546",
       "previewEmpty": "Ko'rsatish uchun matn yo'q",
+      "presetsLabel": "Tayyor shablonlar",
+      "presetsHint": "Bittasini tanlang yoki o'zingiz yozing",
       "types": { "REMINDER": "Eslatma", "OVERDUE": "Muddati o'tgan", "PAYMENT": "To'lov qabul qilindi", "CUSTOM": "Boshqa" },
       "statuses": { "PENDING": "Tasdiqlanmoqda", "APPROVED": "Tasdiqlangan", "REJECTED": "Rad etilgan" }
     }
