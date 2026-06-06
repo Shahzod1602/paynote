@@ -5,6 +5,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getActiveBusinessId } from "@/lib/user";
 import { isLocale, defaultLocale } from "@/i18n/config";
+import { notifyOwnerPaymentReceived } from "@/lib/notify/owner";
 import type { ActionResult } from "./customers";
 
 function loc(value: FormDataEntryValue | null): string {
@@ -100,6 +101,7 @@ export async function addPayment(formData: FormData): Promise<ActionResult> {
     data: { amount: parsed.data.amount, debtId: debt.id },
   });
   await refreshStatus(debt.id);
+  await notifyOwnerPaymentReceived(businessId, debt.customerId, parsed.data.amount);
 
   revalidate(loc(formData.get("locale")));
   return { ok: true };
@@ -147,6 +149,7 @@ export async function addCustomerPayment(formData: FormData): Promise<ActionResu
     await prisma.payment.create({ data: { amount: remaining, debtId: last.id } });
     await refreshStatus(last.id);
   }
+  await notifyOwnerPaymentReceived(businessId, parsed.data.customerId, parsed.data.amount);
 
   revalidate(loc(formData.get("locale")));
   return { ok: true };

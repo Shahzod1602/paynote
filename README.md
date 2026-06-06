@@ -101,6 +101,35 @@ Productionda kunlik cron (Vercel Cron / system cron) bilan chaqiring.
 - Telegram: `TELEGRAM_BOT_TOKEN` (@BotFather dan). Mijoz avval botga `/start` bosib, uning `chat_id` si mijoz kartochkasiga kiritiladi.
 - SMS: `IDENTIFY_SMS_API_KEY` (sms.identify.uz dashboard → API keys, `sk_live_...`). Ixtiyoriy: `IDENTIFY_SMS_SIM` (1 yoki 2).
 
+## 📱 Telegram Mini App (`/tma`)
+
+Biznes egasi uchun Telegram ichidagi mobil ilova — PC ochmasdan, telefondan asosiy amallarni bajaradi.
+
+**Qamrov (tez amallar):** kim qarzdor + jami summa, mijozlarni qidirish, qarz qo'shish, to'lov qabul qilish, eslatma yuborish (SMS/Telegram). To'liq dashboard (mahsulot/shablon/hisobot) v1'da yo'q.
+
+**Kirish (hybrid):** ilova ochilganda Telegram `initData` HMAC bilan tekshiriladi (`lib/tma/verify.ts`, Node runtime). Telegram foydalanuvchisi akkauntga ulangan bo'lsa — avtomatik kiradi; bo'lmasa telefon raqamni ulashadi (mos kelsa) yoki **telefon+parol** bilan kiradi va Telegram akkaunti bog'lanadi (`User.telegramUserId`). Keyin doimo avtomatik. Sessiya mavjud `pdaftar_session` cookie'ni qayta ishlatadi — barcha server action'lar o'zgarishsiz ishlaydi.
+
+- Route'lar: `app/tma/*` (UI), `app/api/tma/{auth,link,data}` (bootstrap + ma'lumot). `proxy.ts` da `/tma` til-yo'naltirishdan chiqarilgan.
+- UI: `components/tma/*` — Telegram temasi (`themeParams`), BackButton, haptik.
+
+**Egaga bildirishnoma:** to'lov kelganda bot egaga DM yuboradi (`lib/notify/owner.ts`, `lib/actions/debts.ts`). Kunlik xulosa (kim qarzdor + jami) cron orqali:
+```bash
+curl "http://localhost:3000/api/cron/owner-summary?secret=$CRON_SECRET"
+# yoki: Authorization: Bearer <CRON_SECRET>
+```
+
+**Botni ulash (bir martalik):** `TELEGRAM_BOT_TOKEN` to'ldirilgan bo'lsin, so'ng BotFather menyu tugmasini Mini App'ga yo'naltiring:
+- @BotFather → `/mybots` → bot → **Bot Settings → Menu Button** → URL: `https://paynote.identify.uz/tma`
+- yoki API orqali (bir marta):
+```bash
+curl -s "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/setChatMenuButton" \
+  -H "Content-Type: application/json" \
+  -d '{"menu_button":{"type":"web_app","text":"Daftar","web_app":{"url":"https://paynote.identify.uz/tma"}}}'
+```
+Mini App **HTTPS** talab qiladi — `https://paynote.identify.uz` tayyor. **Webhook kerak emas** (faqat chiquvchi DM + menyu tugmasi). Yangi env ham kerak emas (`TELEGRAM_BOT_TOKEN`, `AUTH_SECRET`, `CRON_SECRET` bor).
+
+**Lokal sinov:** initData tekshiruvi unit-testi — `npx tsx lib/tma/verify.test.ts`. UI'ni brauzerda sinash uchun (Telegram'siz) to'g'ri imzolangan `?initData=...` query'sini `/tma` ga qo'shing (server baribir HMAC'ni tekshiradi).
+
 ## Deploy (Docker + GitHub Actions CI/CD)
 
 App + PostgreSQL Docker Compose orqali ishlaydi. `main`'ga push qilinganda GitHub Actions serverga SSH orqali deploy qiladi (`.github/workflows/deploy.yml`).

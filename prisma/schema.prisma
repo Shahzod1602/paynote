@@ -8,12 +8,13 @@ datasource db {
 }
 
 model User {
-  id           String     @id @default(cuid())
-  name         String
-  phone        String     @unique
-  passwordHash String
-  businesses   Business[]
-  createdAt    DateTime   @default(now())
+  id             String     @id @default(cuid())
+  name           String
+  phone          String     @unique
+  passwordHash   String
+  telegramUserId String?    @unique // bog'langan Telegram numeric user id (Mini App login)
+  businesses     Business[]
+  createdAt      DateTime   @default(now())
 }
 
 model Business {

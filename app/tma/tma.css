@@ -1,0 +1,61 @@
+/* Telegram Mini App theme bridge. CSS vars are set from WebApp.themeParams in
+   TmaProvider; values below are light-mode fallbacks (also used in a browser). */
+:root {
+  --tg-bg: #ffffff;
+  --tg-text: #0b1220;
+  --tg-hint: #707991;
+  --tg-link: #2563eb;
+  --tg-button: #2563eb;
+  --tg-button-text: #ffffff;
+  --tg-secondary-bg: #f1f4f9;
+  --tg-section-bg: #ffffff;
+  --tg-separator: #e7ebf3;
+  --tg-destructive: #e5484d;
+  --tg-subtitle: #707991;
+}
+
+.tma-app {
+  background: var(--tg-secondary-bg);
+  color: var(--tg-text);
+  min-height: 100vh;
+  min-height: 100dvh;
+  -webkit-tap-highlight-color: transparent;
+}
+.tma-card {
+  background: var(--tg-section-bg);
+  border-color: var(--tg-separator);
+}
+.tma-text {
+  color: var(--tg-text);
+}
+.tma-hint {
+  color: var(--tg-hint);
+}
+.tma-sep {
+  border-color: var(--tg-separator);
+}
+.tma-btn {
+  background: var(--tg-button);
+  color: var(--tg-button-text);
+}
+.tma-btn:disabled {
+  opacity: 0.55;
+}
+.tma-accent {
+  color: var(--tg-button);
+}
+.tma-link {
+  color: var(--tg-link);
+}
+.tma-destructive {
+  color: var(--tg-destructive);
+}
+.tma-field {
+  background: var(--tg-bg);
+  color: var(--tg-text);
+  border-color: var(--tg-separator);
+}
+.tma-field::placeholder {
+  color: var(--tg-hint);
+  opacity: 0.7;
+}

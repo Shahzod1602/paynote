@@ -20,6 +20,12 @@ function getLocale(request: NextRequest): string {
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Telegram Mini App lives at a fixed, locale-free path. Let it through
+  // untouched — it has its own auth bootstrap and reads locale from initData.
+  if (pathname === "/tma" || pathname.startsWith("/tma/")) {
+    return NextResponse.next();
+  }
+
   const hasLocale = locales.some(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)
   );
