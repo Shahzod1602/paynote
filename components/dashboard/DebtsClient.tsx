@@ -1,13 +1,15 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Modal } from "@/components/ui/Modal";
-import { createDebt, addPayment, deleteDebt } from "@/lib/actions/debts";
+import { createDebt, addCustomerPayment, deleteCustomerDebts } from "@/lib/actions/debts";
 import { sendReminderAction } from "@/lib/actions/notify";
 import { linkTelegram } from "@/lib/actions/customers";
+import { localePath } from "@/lib/utils";
 import { formatMoney, formatDate, type Currency } from "@/lib/format";
-import type { DebtView, TemplateOption, ProductView } from "@/lib/queries";
+import type { GroupedDebtView, TemplateOption, ProductView } from "@/lib/queries";
 import type { Locale } from "@/i18n/config";
 
 type FormDict = {
@@ -52,6 +54,9 @@ type FormDict = {
   noContacts: string;
   tgNotConfigured: string;
   chatIdSaved: string;
+  deleteCustomerConfirm: string;
+  debtCount: string;
+  overpaid: string;
 };
 
 type TgContact = { chatId: string; name: string; username: string | null };
@@ -61,7 +66,7 @@ type TableDict = { customer: string; amount: string; due: string; status: string
 
 type Props = {
   locale: Locale;
-  debts: DebtView[];
+  debts: GroupedDebtView[];
   customers: { id: string; name: string }[];
   templates: TemplateOption[];
   products: ProductView[];
@@ -86,8 +91,8 @@ export function DebtsClient({ locale, debts, customers, templates, products, pro
   const router = useRouter();
   const [debtOpen, setDebtOpen] = useState(false);
   const [debtAmount, setDebtAmount] = useState("");
-  const [payDebt, setPayDebt] = useState<DebtView | null>(null);
-  const [reminderDebt, setReminderDebt] = useState<DebtView | null>(null);
+  const [payDebt, setPayDebt] = useState<GroupedDebtView | null>(null);
+  const [reminderDebt, setReminderDebt] = useState<GroupedDebtView | null>(null);
   const [reminderMsg, setReminderMsg] = useState<{ kind: "ok" | "info" | "err"; text: string } | null>(null);
   const [chatId, setChatId] = useState("");
   const [contacts, setContacts] = useState<TgContact[] | null>(null);
@@ -95,7 +100,7 @@ export function DebtsClient({ locale, debts, customers, templates, products, pro
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
-  function openReminder(d: DebtView) {
+  function openReminder(d: GroupedDebtView) {
     setReminderMsg(null);
     setContacts(null);
     setChatId(d.customerTelegramChatId ?? "");
@@ -128,7 +133,7 @@ export function DebtsClient({ locale, debts, customers, templates, products, pro
 
   function submitReminder(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!reminderDebt) return;
+    if (!reminderDebt || !reminderDebt.reminderDebtId) return;
     const formEl = new FormData(e.currentTarget);
     const channel = (formEl.get("channel") as string) || "AUTO";
     const templateId = (formEl.get("template") as string) || "";
@@ -146,7 +151,7 @@ export function DebtsClient({ locale, debts, customers, templates, products, pro
 
       const fd = new FormData();
       fd.set("locale", locale);
-      fd.set("debtId", reminderDebt.id);
+      fd.set("debtId", reminderDebt.reminderDebtId!);
       fd.set("channel", channel);
       if (templateId) fd.set("templateId", templateId);
       const res = await sendReminderAction(fd);
@@ -192,9 +197,9 @@ export function DebtsClient({ locale, debts, customers, templates, products, pro
     if (!payDebt) return;
     const fd = new FormData(e.currentTarget);
     fd.set("locale", locale);
-    fd.set("debtId", payDebt.id);
+    fd.set("customerId", payDebt.customerId);
     startTransition(async () => {
-      const res = await addPayment(fd);
+      const res = await addCustomerPayment(fd);
       if (res.ok) {
         setPayDebt(null);
         router.refresh();
@@ -202,13 +207,13 @@ export function DebtsClient({ locale, debts, customers, templates, products, pro
     });
   }
 
-  function onDelete(d: DebtView) {
-    if (!confirm(form.deleteConfirm)) return;
+  function onDelete(d: GroupedDebtView) {
+    if (!confirm(form.deleteCustomerConfirm)) return;
     const fd = new FormData();
-    fd.set("id", d.id);
+    fd.set("customerId", d.customerId);
     fd.set("locale", locale);
     startTransition(async () => {
-      await deleteDebt(fd);
+      await deleteCustomerDebts(fd);
       router.refresh();
     });
   }
@@ -255,13 +260,29 @@ export function DebtsClient({ locale, debts, customers, templates, products, pro
               </thead>
               <tbody>
                 {debts.map((d) => (
-                  <tr key={d.id} className="border-t border-line">
+                  <tr key={d.customerId} className="border-t border-line">
                     <td className="px-5 py-3.5">
-                      <p className="font-medium text-ink">{d.customerName}</p>
-                      {d.note && <p className="text-xs text-muted">{d.note}</p>}
+                      <Link
+                        href={localePath(locale, `/dashboard/customers/${d.customerId}`)}
+                        className="font-medium text-ink transition hover:text-brand-700 hover:underline"
+                      >
+                        {d.customerName}
+                      </Link>
+                      {d.debtCount > 1 && (
+                        <p className="text-xs text-muted">{d.debtCount} {form.debtCount}</p>
+                      )}
                     </td>
                     <td className="px-5 py-3.5 font-semibold text-ink">{formatMoney(d.amount, currency)}</td>
-                    <td className="px-5 py-3.5 font-semibold text-ink">{formatMoney(d.balance, currency)}</td>
+                    <td className="px-5 py-3.5 font-semibold text-ink">
+                      {d.balance < 0 ? (
+                        <span className="text-emerald-600">
+                          +{formatMoney(-d.balance, currency)}{" "}
+                          <span className="text-xs font-normal text-muted">({form.overpaid})</span>
+                        </span>
+                      ) : (
+                        formatMoney(d.balance, currency)
+                      )}
+                    </td>
                     <td className="px-5 py-3.5 text-muted">{formatDate(d.dueDate)}</td>
                     <td className="px-5 py-3.5">
                       <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${badge[d.status]}`}>

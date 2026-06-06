@@ -105,6 +105,66 @@ export async function addPayment(formData: FormData): Promise<ActionResult> {
   return { ok: true };
 }
 
+const customerPaymentSchema = z.object({
+  customerId: z.string().min(1),
+  amount: amountField,
+});
+
+/**
+ * Records a payment against a customer's whole balance. The amount is applied
+ * to that customer's open debts oldest-first; any leftover (overpayment) is
+ * attached to the most recent debt so the money is never lost.
+ */
+export async function addCustomerPayment(formData: FormData): Promise<ActionResult> {
+  const businessId = await getActiveBusinessId();
+  if (!businessId) return { ok: false, error: "UNAUTHORIZED" };
+
+  const parsed = customerPaymentSchema.safeParse({
+    customerId: formData.get("customerId"),
+    amount: formData.get("amount"),
+  });
+  if (!parsed.success) return { ok: false, error: "INVALID_INPUT" };
+
+  const debts = await prisma.debt.findMany({
+    where: { customerId: parsed.data.customerId, businessId },
+    include: { payments: true },
+    orderBy: { createdAt: "asc" },
+  });
+  if (debts.length === 0) return { ok: false, error: "NOT_FOUND" };
+
+  let remaining = parsed.data.amount;
+  for (const debt of debts) {
+    if (remaining <= 0) break;
+    const open = Number(debt.amount) - debt.payments.reduce((s, p) => s + Number(p.amount), 0);
+    if (open <= 0) continue;
+    const pay = Math.min(open, remaining);
+    await prisma.payment.create({ data: { amount: pay, debtId: debt.id } });
+    await refreshStatus(debt.id);
+    remaining -= pay;
+  }
+  if (remaining > 0) {
+    const last = debts[debts.length - 1];
+    await prisma.payment.create({ data: { amount: remaining, debtId: last.id } });
+    await refreshStatus(last.id);
+  }
+
+  revalidate(loc(formData.get("locale")));
+  return { ok: true };
+}
+
+/** Deletes every debt (and its payments, via cascade) for one customer. */
+export async function deleteCustomerDebts(formData: FormData): Promise<ActionResult> {
+  const businessId = await getActiveBusinessId();
+  if (!businessId) return { ok: false, error: "UNAUTHORIZED" };
+
+  const customerId = String(formData.get("customerId") || "");
+  if (!customerId) return { ok: false, error: "INVALID_INPUT" };
+
+  await prisma.debt.deleteMany({ where: { customerId, businessId } });
+  revalidate(loc(formData.get("locale")));
+  return { ok: true };
+}
+
 export async function deleteDebt(formData: FormData): Promise<ActionResult> {
   const businessId = await getActiveBusinessId();
   if (!businessId) return { ok: false, error: "UNAUTHORIZED" };

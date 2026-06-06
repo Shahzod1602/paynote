@@ -3,7 +3,7 @@ import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { getActiveBusinessId } from "@/lib/user";
 import { getServerCurrency } from "@/lib/currency";
-import { getDebts, getCustomers, getApprovedTemplates, getProducts } from "@/lib/queries";
+import { getDebtsGrouped, getCustomers, getApprovedTemplates, getProducts } from "@/lib/queries";
 import { DebtsClient } from "@/components/dashboard/DebtsClient";
 
 export default async function DebtsPage({
@@ -20,7 +20,7 @@ export default async function DebtsPage({
   if (!businessId) redirect(`/${locale}/login`);
 
   const [debts, customers, templates, products, currency] = await Promise.all([
-    getDebts(businessId),
+    getDebtsGrouped(businessId),
     getCustomers(businessId),
     getApprovedTemplates(businessId),
     getProducts(businessId),

@@ -74,6 +74,88 @@ export async function getDebts(businessId: string): Promise<DebtView[]> {
   });
 }
 
+export type GroupedDebtView = {
+  customerId: string;
+  customerName: string;
+  customerTelegramChatId: string | null;
+  amount: number;
+  paid: number;
+  balance: number;
+  debtCount: number;
+  dueDate: string | null;
+  note: string | null;
+  status: DebtStatus;
+  /** Oldest still-open debt — used as the target for reminders. Null when fully paid. */
+  reminderDebtId: string | null;
+  createdAt: string;
+};
+
+/**
+ * One row per customer: all of a customer's debts collapsed into a single
+ * running balance. Two debts opened for the same person no longer split into
+ * separate rows; individual debts stay visible on the customer profile page.
+ */
+export async function getDebtsGrouped(businessId: string): Promise<GroupedDebtView[]> {
+  const customers = await prisma.customer.findMany({
+    where: { businessId, debts: { some: {} } },
+    include: { debts: { include: { payments: true }, orderBy: { createdAt: "asc" } } },
+  });
+
+  const rows = customers.map((c) => {
+    let amount = 0;
+    let paid = 0;
+    let balance = 0;
+    let anyOverdue = false;
+    let earliestOpenDue: Date | null = null;
+    let latestCreated = c.createdAt;
+    let reminderDebtId: string | null = null;
+    let reminderRank = -1; // prefer overdue (2) over plain open (1)
+    let lastNote: string | null = null;
+
+    for (const d of c.debts) {
+      const a = num(d.amount);
+      const p = d.payments.reduce((s, pay) => s + num(pay.amount), 0);
+      // Net per debt — keep the sign so an overpayment shows as a negative
+      // balance (the shop owes the customer) instead of being clamped to 0.
+      const net = a - p;
+      amount += a;
+      paid += p;
+      balance += net;
+      if (d.createdAt > latestCreated) latestCreated = d.createdAt;
+      if (net > 0) {
+        const overdue = !!d.dueDate && d.dueDate.getTime() < Date.now();
+        if (overdue) anyOverdue = true;
+        if (d.dueDate && (!earliestOpenDue || d.dueDate < earliestOpenDue)) earliestOpenDue = d.dueDate;
+        if (d.note) lastNote = d.note;
+        const rank = overdue ? 2 : 1;
+        if (rank > reminderRank) {
+          reminderRank = rank;
+          reminderDebtId = d.id;
+        }
+      }
+    }
+
+    const status: DebtStatus = balance <= 0 ? "PAID" : anyOverdue ? "OVERDUE" : "PENDING";
+    return {
+      customerId: c.id,
+      customerName: c.name,
+      customerTelegramChatId: c.telegramChatId,
+      amount,
+      paid,
+      balance,
+      debtCount: c.debts.length,
+      dueDate: earliestOpenDue ? earliestOpenDue.toISOString() : null,
+      note: lastNote,
+      status,
+      reminderDebtId,
+      createdAt: latestCreated.toISOString(),
+    };
+  });
+
+  rows.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  return rows;
+}
+
 export async function getCustomers(businessId: string): Promise<CustomerView[]> {
   const customers = await prisma.customer.findMany({
     where: { businessId },
@@ -86,7 +168,7 @@ export async function getCustomers(businessId: string): Promise<CustomerView[]> 
     for (const d of c.debts) {
       const amount = num(d.amount);
       const paid = d.payments.reduce((s, p) => s + num(p.amount), 0);
-      balance += Math.max(amount - paid, 0);
+      balance += amount - paid; // net — negative means overpaid (credit)
     }
     return {
       id: c.id,
@@ -161,7 +243,7 @@ export async function getCustomerProfile(
     phone: c.phone,
     note: c.note,
     telegramChatId: c.telegramChatId,
-    balance: Math.max(totalBorrowed - totalPaid, 0),
+    balance: totalBorrowed - totalPaid, // net — negative means overpaid (credit)
     totalBorrowed,
     totalPaid,
     createdAt: c.createdAt.toISOString(),

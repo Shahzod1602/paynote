@@ -48,10 +48,10 @@ export default async function ReportsPage({
           </div>
         </div>
 
-        <div className="flex h-48 items-end gap-2 overflow-x-auto pb-1">
+        <div className="flex h-48 items-stretch gap-2 overflow-x-auto pb-1">
           {data.map((d) => (
-            <div key={d.key} className="flex min-w-[34px] flex-1 flex-col items-center gap-1.5">
-              <div className="flex h-full w-full items-end justify-center gap-1">
+            <div key={d.key} className="flex h-full min-w-[34px] flex-1 flex-col items-center gap-1.5">
+              <div className="flex min-h-0 w-full flex-1 items-end justify-center gap-1">
                 <div
                   className="w-1/2 max-w-[14px] rounded-t bg-brand-500 transition-all"
                   style={{ height: `${(d.borrowed / max) * 100}%` }}

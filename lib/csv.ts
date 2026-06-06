@@ -5,6 +5,15 @@ function cell(v: string | number): string {
   return /[",\n\r;]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
+/**
+ * Forces Excel to treat a value as text, not a number/formula. Without this a
+ * phone like "+998901234567" is read as a formula → shown as "9.99E+11".
+ * Re-import stays safe: normalizePhone strips the ="…" wrapper down to digits.
+ */
+export function excelText(v: string): string {
+  return v ? `="${v.replace(/"/g, '""')}"` : "";
+}
+
 export function toCsv(headers: string[], rows: (string | number)[][]): string {
   const lines = [headers.map(cell).join(","), ...rows.map((r) => r.map(cell).join(","))];
   return "﻿" + lines.join("\r\n"); // BOM so Excel reads UTF-8 (Cyrillic/Uzbek)

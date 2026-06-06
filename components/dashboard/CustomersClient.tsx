@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Modal } from "@/components/ui/Modal";
 import { createCustomer, updateCustomer, deleteCustomer, importCustomers } from "@/lib/actions/customers";
 import { formatMoney, type Currency } from "@/lib/format";
-import { toCsv, parseCsv, downloadCsv } from "@/lib/csv";
+import { toCsv, parseCsv, downloadCsv, excelText } from "@/lib/csv";
 import type { CustomerView } from "@/lib/queries";
 import type { Locale } from "@/i18n/config";
 import { localePath } from "@/lib/utils";
@@ -76,7 +76,7 @@ export function CustomersClient({
 
   function onExport() {
     const headers = ["ID", "Name", "Phone", "Balance", "Debts"];
-    const rows = customers.map((c) => [c.code, c.name, c.phone ?? "", c.balance, c.debtCount]);
+    const rows = customers.map((c) => [c.code, c.name, excelText(c.phone ?? ""), c.balance, c.debtCount]);
     downloadCsv("customers.csv", toCsv(headers, rows));
   }
 
