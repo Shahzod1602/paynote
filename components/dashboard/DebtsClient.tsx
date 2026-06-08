@@ -383,7 +383,7 @@ export function DebtsClient({ locale, debts, customers, templates, products, pro
               className="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition placeholder:text-muted/60 focus:border-brand-400 focus:ring-2 focus:ring-brand-100"
             />
           </label>
-          <Input label={form.dueDate} name="dueDate" type="date" />
+          <Input label={form.dueDate} name="dueDate" type="date" min="2000-01-01" max="2100-12-31" />
           <Input label={form.note} name="note" placeholder="..." />
           {error && <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</p>}
           <Actions pending={pending} onCancel={() => setDebtOpen(false)} cancel={form.cancel} save={form.save} saving={form.saving} />
@@ -542,6 +542,8 @@ function Input({
   required,
   inputMode,
   defaultValue,
+  min,
+  max,
 }: {
   label: string;
   name: string;
@@ -550,6 +552,8 @@ function Input({
   required?: boolean;
   inputMode?: "numeric" | "text";
   defaultValue?: string;
+  min?: string;
+  max?: string;
 }) {
   return (
     <label className="block">
@@ -561,6 +565,8 @@ function Input({
         placeholder={placeholder}
         required={required}
         defaultValue={defaultValue}
+        min={min}
+        max={max}
         // Manual entry only — block mouse-wheel from changing numeric fields.
         onWheel={(e) => (e.target as HTMLInputElement).blur()}
         className="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition placeholder:text-muted/60 focus:border-brand-400 focus:ring-2 focus:ring-brand-100"

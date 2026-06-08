@@ -37,10 +37,23 @@ const amountField = z.preprocess(
   z.number().positive()
 );
 
+// Accept only YYYY-MM-DD with a 4-digit year inside a sane range — guards
+// against malformed years like "200002" that native date inputs can produce.
+const dueDateField = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/)
+  .refine((s) => {
+    const d = new Date(s);
+    if (Number.isNaN(d.getTime())) return false;
+    const year = d.getUTCFullYear();
+    return year >= 2000 && year <= 2100;
+  })
+  .optional();
+
 const debtSchema = z.object({
   customerId: z.string().min(1),
   amount: amountField,
-  dueDate: z.string().optional(),
+  dueDate: dueDateField,
   note: z.string().trim().optional(),
 });
 

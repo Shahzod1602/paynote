@@ -82,7 +82,7 @@ export function AddDebtSheet({
           </label>
         )}
         <Field label={s.amount} name="amount" type="text" inputMode="numeric" required placeholder="500000" />
-        <Field label={s.dueDate} name="dueDate" type="date" />
+        <Field label={s.dueDate} name="dueDate" type="date" min="2000-01-01" max="2100-12-31" />
         <Field label={s.note} name="note" placeholder="…" />
         {err && <p className="rounded-xl bg-rose-100 px-3 py-2 text-sm text-rose-700">{err}</p>}
         <PrimaryButton type="submit" loading={busy}>
