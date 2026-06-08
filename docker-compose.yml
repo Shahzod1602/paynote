@@ -33,5 +33,23 @@ services:
     ports:
       - "127.0.0.1:3008:3000"
 
+  # Kunlik off-site DB backup -> storage.identify.uz (storagedb Storage API).
+  # STORAGE_* sozlanmagan bo'lsa, backup.sh shunchaki SKIP qiladi (boshqa servislarga ta'sir yo'q).
+  backup:
+    build: ./backup
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_DB: paynote
+      POSTGRES_USER: paynote
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      STORAGE_API_URL: ${STORAGE_API_URL:-}
+      STORAGE_SERVICE_KEY: ${STORAGE_SERVICE_KEY:-}
+      STORAGE_BUCKET: ${STORAGE_BUCKET:-paynote-backups}
+      BACKUP_SCHEDULE: ${BACKUP_SCHEDULE:-0 3 * * *}
+
 volumes:
   pgdata:
