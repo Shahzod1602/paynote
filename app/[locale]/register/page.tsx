@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
-import { AuthCard } from "@/components/auth/AuthCard";
+import { RegisterCard } from "@/components/auth/RegisterCard";
 
 export default async function RegisterPage({
   params,
@@ -11,5 +11,5 @@ export default async function RegisterPage({
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const dict = await getDictionary(locale);
-  return <AuthCard mode="register" locale={locale} dict={dict.auth} />;
+  return <RegisterCard locale={locale} dict={dict.auth} />;
 }

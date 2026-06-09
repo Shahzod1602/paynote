@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
-import { AuthCard } from "@/components/auth/AuthCard";
+import { ResetCard } from "@/components/auth/ResetCard";
 
-export default async function LoginPage({
+export default async function ResetPage({
   params,
 }: {
   params: Promise<{ locale: string }>;
@@ -11,5 +11,5 @@ export default async function LoginPage({
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const dict = await getDictionary(locale);
-  return <AuthCard locale={locale} dict={dict.auth} />;
+  return <ResetCard locale={locale} dict={dict.auth} />;
 }
