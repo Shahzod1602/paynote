@@ -83,10 +83,10 @@ export function ResetCard({ locale, dict }: { locale: Locale; dict: AuthDict }) 
               label={dict.code}
               name="code"
               type="text"
-              placeholder="123456"
+              placeholder="12345"
               autoComplete="one-time-code"
               inputMode="numeric"
-              maxLength={6}
+              maxLength={5}
             />
             {verifyError && <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{verifyError}</p>}
             <SubmitButton label={dict.verifyCode} />

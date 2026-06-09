@@ -169,6 +169,7 @@
     "smsFailed": "SMS yuborib bo'lmadi. Birozdan keyin urinib ko'ring.",
     "phoneNotFound": "Bu raqam ro'yxatdan o'tmagan.",
     "accountBlocked": "Hisobingiz bloklangan. Administrator bilan bog'laning.",
+    "rateLimited": "Juda ko'p xato urinish. 30 daqiqadan keyin qaytadan urinib ko'ring.",
     "demoTitle": "Demo hisob",
     "demoHint": "Telefon: +998 90 123 45 67 · Parol: demo1234",
     "demoFill": "Demo hisob bilan kirish"
@@ -386,6 +387,19 @@
       "presetsHint": "Bittasini tanlang yoki o'zingiz yozing",
       "types": { "REMINDER": "Eslatma", "OVERDUE": "Muddati o'tgan", "PAYMENT": "To'lov qabul qilindi", "CUSTOM": "Boshqa" },
       "statuses": { "PENDING": "Tasdiqlanmoqda", "APPROVED": "Tasdiqlangan", "REJECTED": "Rad etilgan" }
+    },
+    "settings": {
+      "title": "Sozlamalar",
+      "subtitle": "Hisob sozlamalari va xavfsizlik.",
+      "devices": "Qurilmalar",
+      "devicesSubtitle": "Hisobingizga kirgan barcha qurilmalar.",
+      "currentDevice": "Joriy qurilma",
+      "otherDevices": "Boshqa qurilmalar",
+      "revoke": "Chiqarish",
+      "revokeConfirm": "Bu qurilmani chiqarib tashlaysizmi?",
+      "noDevices": "Faol qurilmalar yo'q.",
+      "lastActive": "Oxirgi faollik",
+      "joined": "Qo'shilgan"
     }
   }
 }

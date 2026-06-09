@@ -89,10 +89,10 @@ export function RegisterCard({ locale, dict }: { locale: Locale; dict: AuthDict 
               label={dict.code}
               name="code"
               type="text"
-              placeholder="123456"
+              placeholder="12345"
               autoComplete="one-time-code"
               inputMode="numeric"
-              maxLength={6}
+              maxLength={5}
             />
             <p className="text-xs text-muted">{dict.createPasswordHint}</p>
             <Field

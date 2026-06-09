@@ -2,14 +2,23 @@
 
 import { randomInt } from "node:crypto";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { VerificationPurpose } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { createSession, destroySession } from "@/lib/session";
+import { createSession, destroySession, getSessionId, getUserId } from "@/lib/session";
 import { isLocale, defaultLocale } from "@/i18n/config";
 import { normalizePhone as normalizeUzPhone } from "@/lib/phone";
 import { sendSms } from "@/lib/notify/sms";
+import {
+  getClientIp,
+  checkRateLimit,
+  recordFailedAttempt,
+  clearRateLimit,
+  createLoginSession,
+  revokeSession,
+} from "@/lib/rate-limit";
 
 export type AuthState = { error?: string; sent?: boolean; verified?: boolean; code?: string };
 
@@ -47,7 +56,7 @@ async function issueCode(
     return { error: "RESEND_TOO_SOON" };
   }
 
-  const code = String(randomInt(100000, 1000000));
+  const code = String(randomInt(10000, 100000));
   const codeHash = await bcrypt.hash(code, 10);
   const expiresAt = new Date(Date.now() + CODE_TTL_MS);
 
@@ -96,7 +105,7 @@ const startRegisterSchema = z.object({
 const completeRegisterSchema = z.object({
   name: z.string().trim().min(2),
   phone: z.string().trim().min(7),
-  code: z.string().trim().length(6),
+  code: z.string().trim().length(5),
   password: z.string().min(6),
   confirmPassword: z.string(),
 });
@@ -111,6 +120,12 @@ export async function startRegisterAction(
   _prev: AuthState,
   formData: FormData
 ): Promise<AuthState> {
+  const ip = await getClientIp();
+  const rateCheck = await checkRateLimit(ip, "REGISTER");
+  if (!rateCheck.allowed) {
+    return { error: "RATE_LIMITED" };
+  }
+
   const locale = safeLocale(formData.get("locale"));
   const parsed = startRegisterSchema.safeParse({
     name: formData.get("name"),
@@ -167,7 +182,11 @@ export async function completeRegisterAction(
     where: { phone, purpose: VerificationPurpose.REGISTER },
   });
 
-  await createSession(user.id);
+  const ip = await getClientIp();
+  const h = await headers();
+  const ua = h.get("user-agent") ?? "";
+  const session = await createLoginSession(user.id, ip, ua);
+  await createSession(user.id, session.id);
   redirect(`/${locale}/dashboard`);
 }
 
@@ -176,6 +195,12 @@ export async function startResetAction(
   _prev: AuthState,
   formData: FormData
 ): Promise<AuthState> {
+  const ip = await getClientIp();
+  const rateCheck = await checkRateLimit(ip, "RESET");
+  if (!rateCheck.allowed) {
+    return { error: "RATE_LIMITED" };
+  }
+
   const locale = safeLocale(formData.get("locale"));
   const raw = formData.get("phone");
   const phone = normalizeUzPhone(typeof raw === "string" ? raw : "");
@@ -189,7 +214,7 @@ export async function startResetAction(
 
 const verifyCodeSchema = z.object({
   phone: z.string().trim().min(7),
-  code: z.string().trim().length(6),
+  code: z.string().trim().length(5),
 });
 
 /** Parolni tiklash, 2-bosqich: SMS kodni tekshirish (alohida). */
@@ -197,6 +222,12 @@ export async function verifyResetCodeAction(
   _prev: AuthState,
   formData: FormData
 ): Promise<AuthState> {
+  const ip = await getClientIp();
+  const rateCheck = await checkRateLimit(ip, "RESET");
+  if (!rateCheck.allowed) {
+    return { error: "RATE_LIMITED" };
+  }
+
   const parsed = verifyCodeSchema.safeParse({
     phone: formData.get("phone"),
     code: formData.get("code"),
@@ -207,14 +238,18 @@ export async function verifyResetCodeAction(
   if (!phone) return { error: "INVALID_PHONE" };
 
   const codeError = await checkCode(phone, VerificationPurpose.RESET, parsed.data.code);
-  if (codeError) return { error: codeError };
+  if (codeError) {
+    await recordFailedAttempt(ip, "RESET");
+    return { error: codeError };
+  }
 
+  await clearRateLimit(ip, "RESET");
   return { verified: true, code: parsed.data.code };
 }
 
 const completeResetSchema = z.object({
   phone: z.string().trim().min(7),
-  code: z.string().trim().length(6),
+  code: z.string().trim().length(5),
   password: z.string().min(6),
   confirmPassword: z.string(),
 });
@@ -251,28 +286,42 @@ export async function completeResetAction(
     where: { phone, purpose: VerificationPurpose.RESET },
   });
 
-  await createSession(user.id);
+  const ip = await getClientIp();
+  const h = await headers();
+  const ua = h.get("user-agent") ?? "";
+  const session = await createLoginSession(user.id, ip, ua);
+  await createSession(user.id, session.id);
   redirect(`/${locale}/dashboard`);
 }
 
 export async function loginAction(_prev: AuthState, formData: FormData): Promise<AuthState> {
   const locale = safeLocale(formData.get("locale"));
+  const ip = await getClientIp();
+
+  const rateCheck = await checkRateLimit(ip, "LOGIN");
+  if (!rateCheck.allowed) {
+    return { error: "RATE_LIMITED" };
+  }
+
   const parsed = loginSchema.safeParse({
     phone: formData.get("phone"),
     password: formData.get("password"),
   });
   if (!parsed.success) {
+    await recordFailedAttempt(ip, "LOGIN");
     return { error: "INVALID_CREDENTIALS" };
   }
 
   const phone = normalizeUzPhone(parsed.data.phone) ?? lenientPhone(parsed.data.phone);
   const user = await prisma.user.findUnique({ where: { phone } });
   if (!user) {
+    await recordFailedAttempt(ip, "LOGIN");
     return { error: "INVALID_CREDENTIALS" };
   }
 
   const ok = await bcrypt.compare(parsed.data.password, user.passwordHash);
   if (!ok) {
+    await recordFailedAttempt(ip, "LOGIN");
     return { error: "INVALID_CREDENTIALS" };
   }
 
@@ -280,12 +329,22 @@ export async function loginAction(_prev: AuthState, formData: FormData): Promise
     return { error: "ACCOUNT_BLOCKED" };
   }
 
-  await createSession(user.id);
+  await clearRateLimit(ip, "LOGIN");
+
+  const h = await headers();
+  const ua = h.get("user-agent") ?? "";
+  const session = await createLoginSession(user.id, ip, ua);
+  await createSession(user.id, session.id);
   redirect(`/${locale}/dashboard`);
 }
 
 export async function logoutAction(formData: FormData): Promise<void> {
   const locale = safeLocale(formData.get("locale"));
+  const userId = await getUserId();
+  const sessionId = await getSessionId();
+  if (userId && sessionId) {
+    await revokeSession(sessionId, userId);
+  }
   await destroySession();
   redirect(`/${locale}/login`);
 }

@@ -53,7 +53,7 @@ export function Sidebar({ locale, nav }: { locale: Locale; nav: NavDict }) {
     { key: "templates", href: "/dashboard/templates", label: nav.templates },
     { key: "messages", href: "/dashboard/messages", label: nav.messages },
     { key: "reports", href: "/dashboard/reports", label: nav.reports },
-    { key: "settings", href: "/dashboard", label: nav.settings },
+    { key: "settings", href: "/dashboard/settings", label: nav.settings },
   ];
 
   function isActive(href: string) {

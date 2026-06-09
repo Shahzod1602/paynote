@@ -42,6 +42,7 @@ export type AuthDict = {
   smsFailed: string;
   phoneNotFound: string;
   accountBlocked: string;
+  rateLimited: string;
   demoTitle: string;
   demoHint: string;
   demoFill: string;
@@ -73,6 +74,8 @@ export function errorMessage(code: string | undefined, dict: AuthDict): string |
       return dict.phoneNotFound;
     case "ACCOUNT_BLOCKED":
       return dict.accountBlocked;
+    case "RATE_LIMITED":
+      return dict.rateLimited;
     default:
       return null;
   }

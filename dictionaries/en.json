@@ -169,6 +169,7 @@
     "smsFailed": "Could not send the SMS. Try again later.",
     "phoneNotFound": "This number is not registered.",
     "accountBlocked": "Your account is blocked. Please contact the administrator.",
+    "rateLimited": "Too many failed attempts. Please try again in 30 minutes.",
     "demoTitle": "Demo account",
     "demoHint": "Phone: +998 90 123 45 67 · Password: demo1234",
     "demoFill": "Log in with demo account"
@@ -386,6 +387,19 @@
       "presetsHint": "Pick one or write your own",
       "types": { "REMINDER": "Reminder", "OVERDUE": "Overdue", "PAYMENT": "Payment received", "CUSTOM": "Custom" },
       "statuses": { "PENDING": "Pending", "APPROVED": "Approved", "REJECTED": "Rejected" }
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "Account settings and security.",
+      "devices": "Devices",
+      "devicesSubtitle": "All devices logged into your account.",
+      "currentDevice": "Current device",
+      "otherDevices": "Other devices",
+      "revoke": "Revoke",
+      "revokeConfirm": "Revoke this device?",
+      "noDevices": "No active devices.",
+      "lastActive": "Last active",
+      "joined": "Joined"
     }
   }
 }

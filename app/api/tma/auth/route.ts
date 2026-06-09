@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createSession } from "@/lib/session";
 import { verifyInitData, localeFromLanguageCode } from "@/lib/tma/verify";
+import { createLoginSession } from "@/lib/rate-limit";
 
 // node:crypto inside verifyInitData → must run on the Node runtime.
 export const runtime = "nodejs";
@@ -40,6 +41,12 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  await createSession(user.id);
+  const ip =
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    req.headers.get("x-real-ip") ??
+    "unknown";
+  const ua = req.headers.get("user-agent") ?? "";
+  const session = await createLoginSession(user.id, ip, ua);
+  await createSession(user.id, session.id);
   return NextResponse.json({ status: "authed", locale, user: { name: user.name } });
 }

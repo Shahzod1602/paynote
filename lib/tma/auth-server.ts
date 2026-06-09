@@ -1,6 +1,7 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
 import { createSession } from "@/lib/session";
+import { createLoginSession } from "@/lib/rate-limit";
 
 export type LinkError = "TG_ALREADY_LINKED" | "ACCOUNT_LINKED_ELSEWHERE";
 export type LinkOutcome = { ok: true } | { ok: false; error: LinkError };
@@ -30,6 +31,7 @@ export async function bindAndLogin(userId: string, telegramUserId: string): Prom
     await prisma.user.update({ where: { id: userId }, data: { telegramUserId } });
   }
 
-  await createSession(userId);
+  const session = await createLoginSession(userId, "tma", "Telegram Mini App");
+  await createSession(userId, session.id);
   return { ok: true };
 }
