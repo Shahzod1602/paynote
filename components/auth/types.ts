@@ -20,6 +20,7 @@ export type AuthDict = {
   loginButton: string;
   registerButton: string;
   sendCode: string;
+  verifyCode: string;
   resetButton: string;
   resend: string;
   changePhone: string;

@@ -147,6 +147,7 @@
     "loginButton": "Log in",
     "registerButton": "Create account",
     "sendCode": "Send code",
+    "verifyCode": "Verify",
     "resetButton": "Update password",
     "resend": "Resend code",
     "changePhone": "Change number",

@@ -147,6 +147,7 @@
     "loginButton": "Kirish",
     "registerButton": "Hisob yaratish",
     "sendCode": "Kod yuborish",
+    "verifyCode": "Tasdiqlash",
     "resetButton": "Parolni yangilash",
     "resend": "Kodni qayta yuborish",
     "changePhone": "Raqamni o'zgartirish",

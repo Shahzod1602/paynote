@@ -5,26 +5,33 @@ import { useActionState, useEffect, useState } from "react";
 import type { Locale } from "@/i18n/config";
 import { localePath } from "@/lib/utils";
 import { formatPhone } from "@/lib/phone";
-import { startResetAction, completeResetAction, type AuthState } from "@/lib/actions/auth";
+import { startResetAction, verifyResetCodeAction, completeResetAction, type AuthState } from "@/lib/actions/auth";
 import { AuthShell, Field, SubmitButton } from "./AuthShell";
 import { errorMessage, type AuthDict } from "./types";
 
-// Parolni tiklash: (1) telefon → SMS kod, (2) kod + yangi parol.
 export function ResetCard({ locale, dict }: { locale: Locale; dict: AuthDict }) {
-  const [step, setStep] = useState<"phone" | "verify">("phone");
+  const [step, setStep] = useState<"phone" | "code" | "password">("phone");
   const [phone, setPhone] = useState("");
   const [cooldown, setCooldown] = useState(0);
 
   const [startState, startFormAction] = useActionState<AuthState, FormData>(startResetAction, {});
+  const [verifyState, verifyFormAction] = useActionState<AuthState, FormData>(verifyResetCodeAction, {});
   const [completeState, completeFormAction] = useActionState<AuthState, FormData>(completeResetAction, {});
 
-  // Kod yuborilgach verify bosqichiga o'tamiz (renderda moslash, effekt emas).
   const [prevStartState, setPrevStartState] = useState(startState);
   if (prevStartState !== startState) {
     setPrevStartState(startState);
     if (startState.sent) {
-      setStep("verify");
+      setStep("code");
       setCooldown(60);
+    }
+  }
+
+  const [prevVerifyState, setPrevVerifyState] = useState(verifyState);
+  if (prevVerifyState !== verifyState) {
+    setPrevVerifyState(verifyState);
+    if (verifyState.verified) {
+      setStep("password");
     }
   }
 
@@ -35,17 +42,21 @@ export function ResetCard({ locale, dict }: { locale: Locale; dict: AuthDict }) 
   }, [cooldown]);
 
   const startError = errorMessage(startState.error, dict);
+  const verifyError = errorMessage(verifyState.error, dict);
   const completeError = errorMessage(completeState.error, dict);
-  const isVerify = step === "verify";
 
   return (
     <AuthShell
       locale={locale}
-      title={dict.resetTitle}
-      subtitle={isVerify ? `${dict.codeSentTo} ${formatPhone(phone)}` : dict.resetSubtitle}
+      title={step === "password" ? dict.newPassword : dict.resetTitle}
+      subtitle={
+        step === "phone"
+          ? dict.resetSubtitle
+          : `${dict.codeSentTo} ${formatPhone(phone)}`
+      }
       backHome={dict.backHome}
     >
-      {!isVerify && (
+      {step === "phone" && (
         <form action={startFormAction} className="mt-6 space-y-4">
           <input type="hidden" name="locale" value={locale} />
           <Field
@@ -58,16 +69,14 @@ export function ResetCard({ locale, dict }: { locale: Locale; dict: AuthDict }) 
             autoComplete="tel"
             inputMode="tel"
           />
-
           {startError && <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{startError}</p>}
-
           <SubmitButton label={dict.sendCode} />
         </form>
       )}
 
-      {isVerify && (
+      {step === "code" && (
         <>
-          <form action={completeFormAction} className="mt-6 space-y-4">
+          <form action={verifyFormAction} className="mt-6 space-y-4">
             <input type="hidden" name="locale" value={locale} />
             <input type="hidden" name="phone" value={phone} />
             <Field
@@ -79,26 +88,8 @@ export function ResetCard({ locale, dict }: { locale: Locale; dict: AuthDict }) 
               inputMode="numeric"
               maxLength={6}
             />
-            <Field
-              label={dict.newPassword}
-              name="password"
-              type="password"
-              placeholder="••••••••"
-              autoComplete="new-password"
-            />
-            <Field
-              label={dict.confirmPassword}
-              name="confirmPassword"
-              type="password"
-              placeholder="••••••••"
-              autoComplete="new-password"
-            />
-
-            {completeError && (
-              <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{completeError}</p>
-            )}
-
-            <SubmitButton label={dict.resetButton} />
+            {verifyError && <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{verifyError}</p>}
+            <SubmitButton label={dict.verifyCode} />
           </form>
 
           <div className="mt-4 flex items-center justify-between text-sm">
@@ -121,6 +112,31 @@ export function ResetCard({ locale, dict }: { locale: Locale; dict: AuthDict }) 
             <p className="mt-3 rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{startError}</p>
           )}
         </>
+      )}
+
+      {step === "password" && (
+        <form action={completeFormAction} className="mt-6 space-y-4">
+          <input type="hidden" name="locale" value={locale} />
+          <input type="hidden" name="phone" value={phone} />
+          <input type="hidden" name="code" value={verifyState.code ?? ""} />
+          <p className="text-xs text-muted">{dict.createPasswordHint}</p>
+          <Field
+            label={dict.newPassword}
+            name="password"
+            type="password"
+            placeholder="••••••••"
+            autoComplete="new-password"
+          />
+          <Field
+            label={dict.confirmPassword}
+            name="confirmPassword"
+            type="password"
+            placeholder="••••••••"
+            autoComplete="new-password"
+          />
+          {completeError && <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{completeError}</p>}
+          <SubmitButton label={dict.resetButton} />
+        </form>
       )}
 
       <p className="mt-6 text-center text-sm text-muted">

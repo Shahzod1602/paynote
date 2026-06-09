@@ -11,7 +11,7 @@ import { isLocale, defaultLocale } from "@/i18n/config";
 import { normalizePhone as normalizeUzPhone } from "@/lib/phone";
 import { sendSms } from "@/lib/notify/sms";
 
-export type AuthState = { error?: string; sent?: boolean };
+export type AuthState = { error?: string; sent?: boolean; verified?: boolean; code?: string };
 
 const CODE_TTL_MS = 10 * 60 * 1000; // kod 10 daqiqa amal qiladi
 const RESEND_COOLDOWN_MS = 60 * 1000; // qayta yuborish: 60 soniya
@@ -187,6 +187,31 @@ export async function startResetAction(
   return issueCode(phone, VerificationPurpose.RESET, locale);
 }
 
+const verifyCodeSchema = z.object({
+  phone: z.string().trim().min(7),
+  code: z.string().trim().length(6),
+});
+
+/** Parolni tiklash, 2-bosqich: SMS kodni tekshirish (alohida). */
+export async function verifyResetCodeAction(
+  _prev: AuthState,
+  formData: FormData
+): Promise<AuthState> {
+  const parsed = verifyCodeSchema.safeParse({
+    phone: formData.get("phone"),
+    code: formData.get("code"),
+  });
+  if (!parsed.success) return { error: "INVALID_INPUT" };
+
+  const phone = normalizeUzPhone(parsed.data.phone);
+  if (!phone) return { error: "INVALID_PHONE" };
+
+  const codeError = await checkCode(phone, VerificationPurpose.RESET, parsed.data.code);
+  if (codeError) return { error: codeError };
+
+  return { verified: true, code: parsed.data.code };
+}
+
 const completeResetSchema = z.object({
   phone: z.string().trim().min(7),
   code: z.string().trim().length(6),
@@ -194,7 +219,7 @@ const completeResetSchema = z.object({
   confirmPassword: z.string(),
 });
 
-/** Parolni tiklash, 2-bosqich: SMS kod + yangi parol. */
+/** Parolni tiklash, 3-bosqich: yangi parol o'rnatish (kod allaqachon tasdiqlangan). */
 export async function completeResetAction(
   _prev: AuthState,
   formData: FormData
