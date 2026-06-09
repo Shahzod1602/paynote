@@ -5,7 +5,6 @@ import { useActionState, useRef } from "react";
 import type { Locale } from "@/i18n/config";
 import { localePath } from "@/lib/utils";
 import { loginAction, type AuthState } from "@/lib/actions/auth";
-import { DEMO_USER } from "@/lib/auth";
 import { AuthShell, Field, SubmitButton } from "./AuthShell";
 import { errorMessage, type AuthDict } from "./types";
 
@@ -17,26 +16,8 @@ export function AuthCard({ locale, dict }: { locale: Locale; dict: AuthDict }) {
 
   const error = errorMessage(state.error, dict);
 
-  function loginAsDemo() {
-    if (phoneRef.current) phoneRef.current.value = DEMO_USER.phone;
-    if (passwordRef.current) passwordRef.current.value = DEMO_USER.password;
-    formRef.current?.requestSubmit();
-  }
-
   return (
     <AuthShell locale={locale} title={dict.loginTitle} subtitle={dict.loginSubtitle} backHome={dict.backHome}>
-      <div className="mt-6 rounded-xl border border-brand-200 bg-brand-50 p-3.5">
-        <p className="text-xs font-semibold text-brand-800">{dict.demoTitle}</p>
-        <p className="mt-1 text-xs text-brand-700">{dict.demoHint}</p>
-        <button
-          type="button"
-          onClick={loginAsDemo}
-          className="mt-3 w-full rounded-lg bg-brand-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-brand-700"
-        >
-          {dict.demoFill}
-        </button>
-      </div>
-
       <form ref={formRef} action={formAction} className="mt-6 space-y-4">
         <input type="hidden" name="locale" value={locale} />
         <Field
