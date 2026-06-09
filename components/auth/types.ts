@@ -40,6 +40,7 @@ export type AuthDict = {
   resendTooSoon: string;
   smsFailed: string;
   phoneNotFound: string;
+  accountBlocked: string;
   demoTitle: string;
   demoHint: string;
   demoFill: string;
@@ -69,6 +70,8 @@ export function errorMessage(code: string | undefined, dict: AuthDict): string |
       return dict.smsFailed;
     case "PHONE_NOT_FOUND":
       return dict.phoneNotFound;
+    case "ACCOUNT_BLOCKED":
+      return dict.accountBlocked;
     default:
       return null;
   }

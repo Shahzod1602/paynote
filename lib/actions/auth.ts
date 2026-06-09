@@ -251,6 +251,10 @@ export async function loginAction(_prev: AuthState, formData: FormData): Promise
     return { error: "INVALID_CREDENTIALS" };
   }
 
+  if (user.blocked) {
+    return { error: "ACCOUNT_BLOCKED" };
+  }
+
   await createSession(user.id);
   redirect(`/${locale}/dashboard`);
 }
