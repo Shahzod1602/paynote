@@ -11,6 +11,7 @@ import { createSession, destroySession, getSessionId, getUserId } from "@/lib/se
 import { isLocale, defaultLocale } from "@/i18n/config";
 import { normalizePhone as normalizeUzPhone } from "@/lib/phone";
 import { sendSms } from "@/lib/notify/sms";
+import { sendTelegramCode } from "@/lib/notify/telegram-gateway";
 import {
   getClientIp,
   checkRateLimit,
@@ -66,7 +67,13 @@ async function issueCode(
     update: { codeHash, expiresAt, attempts: 0, createdAt: new Date() },
   });
 
-  const result = await sendSms(phone, smsCodeText(code, locale));
+  // Avval Telegram Gateway orqali (arzon, tezkor). Raqamda Telegram bo'lmasa
+  // yoki Gateway sozlanmagan bo'lsa — SMS'ga qaytamiz. SMS sozlanmagan dev'da
+  // sendSms MOCK qaytaradi, shuning uchun oqim baribir davom etadi.
+  let result = await sendTelegramCode(phone, code);
+  if (result.status !== "SENT") {
+    result = await sendSms(phone, smsCodeText(code, locale));
+  }
   if (result.status === "FAILED") {
     return { error: "SMS_FAILED" };
   }
