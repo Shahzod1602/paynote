@@ -7,29 +7,40 @@ import { localePath } from "@/lib/utils";
 import { formatPhone } from "@/lib/phone";
 import {
   startRegisterAction,
+  verifyRegisterCodeAction,
   completeRegisterAction,
   type AuthState,
 } from "@/lib/actions/auth";
 import { AuthShell, Field, SubmitButton } from "./AuthShell";
 import { errorMessage, type AuthDict } from "./types";
 
-// 2 bosqich: (1) ism + telefon → SMS kod, (2) kod + o'z parolini yaratish.
+// 3 bosqich: (1) ism + telefon → kod, (2) kodni tasdiqlash, (3) alohida parol yaratish.
 export function RegisterCard({ locale, dict }: { locale: Locale; dict: AuthDict }) {
-  const [step, setStep] = useState<"details" | "verify">("details");
+  const [step, setStep] = useState<"details" | "verify" | "password">("details");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [cooldown, setCooldown] = useState(0);
 
   const [startState, startFormAction] = useActionState<AuthState, FormData>(startRegisterAction, {});
+  const [verifyState, verifyFormAction] = useActionState<AuthState, FormData>(verifyRegisterCodeAction, {});
   const [completeState, completeFormAction] = useActionState<AuthState, FormData>(completeRegisterAction, {});
 
-  // Kod yuborilgach verify bosqichiga o'tamiz (renderda moslash, effekt emas).
+  // Kod yuborilgach tasdiqlash bosqichiga o'tamiz (renderda moslash, effekt emas).
   const [prevStartState, setPrevStartState] = useState(startState);
   if (prevStartState !== startState) {
     setPrevStartState(startState);
     if (startState.sent) {
       setStep("verify");
       setCooldown(60);
+    }
+  }
+
+  // Kod tasdiqlangach parol bosqichiga o'tamiz.
+  const [prevVerifyState, setPrevVerifyState] = useState(verifyState);
+  if (prevVerifyState !== verifyState) {
+    setPrevVerifyState(verifyState);
+    if (verifyState.verified) {
+      setStep("password");
     }
   }
 
@@ -40,17 +51,17 @@ export function RegisterCard({ locale, dict }: { locale: Locale; dict: AuthDict 
   }, [cooldown]);
 
   const startError = errorMessage(startState.error, dict);
+  const verifyError = errorMessage(verifyState.error, dict);
   const completeError = errorMessage(completeState.error, dict);
-  const isVerify = step === "verify";
 
   return (
     <AuthShell
       locale={locale}
-      title={isVerify ? dict.verifyTitle : dict.registerTitle}
-      subtitle={isVerify ? `${dict.codeSentTo} ${formatPhone(phone)}` : dict.registerSubtitle}
+      title={step === "verify" ? dict.verifyTitle : dict.registerTitle}
+      subtitle={step === "details" ? dict.registerSubtitle : `${dict.codeSentTo} ${formatPhone(phone)}`}
       backHome={dict.backHome}
     >
-      {!isVerify && (
+      {step === "details" && (
         <form action={startFormAction} className="mt-6 space-y-4">
           <input type="hidden" name="locale" value={locale} />
           <Field
@@ -79,11 +90,10 @@ export function RegisterCard({ locale, dict }: { locale: Locale; dict: AuthDict 
         </form>
       )}
 
-      {isVerify && (
+      {step === "verify" && (
         <>
-          <form action={completeFormAction} className="mt-6 space-y-4">
+          <form action={verifyFormAction} className="mt-6 space-y-4">
             <input type="hidden" name="locale" value={locale} />
-            <input type="hidden" name="name" value={name} />
             <input type="hidden" name="phone" value={phone} />
             <Field
               label={dict.code}
@@ -94,27 +104,10 @@ export function RegisterCard({ locale, dict }: { locale: Locale; dict: AuthDict 
               inputMode="numeric"
               maxLength={5}
             />
-            <p className="text-xs text-muted">{dict.createPasswordHint}</p>
-            <Field
-              label={dict.newPassword}
-              name="password"
-              type="password"
-              placeholder="••••••••"
-              autoComplete="new-password"
-            />
-            <Field
-              label={dict.confirmPassword}
-              name="confirmPassword"
-              type="password"
-              placeholder="••••••••"
-              autoComplete="new-password"
-            />
 
-            {completeError && (
-              <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{completeError}</p>
-            )}
+            {verifyError && <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{verifyError}</p>}
 
-            <SubmitButton label={dict.registerButton} />
+            <SubmitButton label={dict.verifyCode} />
           </form>
 
           <div className="mt-4 flex items-center justify-between text-sm">
@@ -134,10 +127,40 @@ export function RegisterCard({ locale, dict }: { locale: Locale; dict: AuthDict 
               {dict.changePhone}
             </button>
           </div>
-          {startError && isVerify && (
+          {startError && (
             <p className="mt-3 rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{startError}</p>
           )}
         </>
+      )}
+
+      {step === "password" && (
+        <form action={completeFormAction} className="mt-6 space-y-4">
+          <input type="hidden" name="locale" value={locale} />
+          <input type="hidden" name="name" value={name} />
+          <input type="hidden" name="phone" value={phone} />
+          <input type="hidden" name="code" value={verifyState.code ?? ""} />
+          <p className="text-xs text-muted">{dict.createPasswordHint}</p>
+          <Field
+            label={dict.newPassword}
+            name="password"
+            type="password"
+            placeholder="••••••••"
+            autoComplete="new-password"
+          />
+          <Field
+            label={dict.confirmPassword}
+            name="confirmPassword"
+            type="password"
+            placeholder="••••••••"
+            autoComplete="new-password"
+          />
+
+          {completeError && (
+            <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{completeError}</p>
+          )}
+
+          <SubmitButton label={dict.registerButton} />
+        </form>
       )}
 
       <p className="mt-6 text-center text-sm text-muted">

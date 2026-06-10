@@ -224,6 +224,37 @@ const verifyCodeSchema = z.object({
   code: z.string().trim().length(5),
 });
 
+/** Ro'yxatdan o'tish, 2-bosqich: kodni tekshirish (parol keyingi alohida bosqichda). */
+export async function verifyRegisterCodeAction(
+  _prev: AuthState,
+  formData: FormData
+): Promise<AuthState> {
+  const ip = await getClientIp();
+  const rateCheck = await checkRateLimit(ip, "REGISTER");
+  if (!rateCheck.allowed) {
+    return { error: "RATE_LIMITED" };
+  }
+
+  const parsed = verifyCodeSchema.safeParse({
+    phone: formData.get("phone"),
+    code: formData.get("code"),
+  });
+  if (!parsed.success) return { error: "INVALID_INPUT" };
+
+  const phone = normalizeUzPhone(parsed.data.phone);
+  if (!phone) return { error: "INVALID_PHONE" };
+
+  const codeError = await checkCode(phone, VerificationPurpose.REGISTER, parsed.data.code);
+  if (codeError) {
+    await recordFailedAttempt(ip, "REGISTER");
+    return { error: codeError };
+  }
+
+  // Kod to'g'ri — endi parol bosqichiga o'tamiz. Kod o'chirilmaydi; hisob
+  // yaratilganda completeRegisterAction uni qayta tekshirib o'chiradi.
+  return { verified: true, code: parsed.data.code };
+}
+
 /** Parolni tiklash, 2-bosqich: SMS kodni tekshirish (alohida). */
 export async function verifyResetCodeAction(
   _prev: AuthState,
