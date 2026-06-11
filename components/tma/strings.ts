@@ -37,6 +37,55 @@ const uz = {
   addDebt: "Qarz qo‘shish",
   tabHome: "Asosiy",
   tabCustomers: "Mijozlar",
+  tabDebts: "Qarzlar",
+  tabProducts: "Mahsulotlar",
+  tabTemplates: "Shablonlar",
+  tabSms: "SMS",
+  tabReports: "Hisobotlar",
+  tabSettings: "Sozlamalar",
+
+  // header / profile
+  business: "Biznes",
+  smsBalance: "SMS balans",
+  logout: "Chiqish",
+
+  // debts page
+  filterAll: "Barchasi",
+
+  // products
+  addProduct: "Mahsulot qo‘shish",
+  productName: "Nomi",
+  price: "Narx",
+  noProducts: "Mahsulot yo‘q",
+  confirmDelete: "O‘chirilsinmi?",
+
+  // templates
+  addTemplate: "Shablon qo‘shish",
+  templateName: "Nomi",
+  templateText: "Matn",
+  templateType: "Turi",
+  typeReminder: "Eslatma",
+  typeOverdue: "Muddati o‘tgan",
+  typePayment: "To‘lov",
+  typeCustom: "Boshqa",
+  noTemplates: "Shablon yo‘q",
+  moderationNote: "Yangi shablon operator tasdig‘idan so‘ng ishlatiladi.",
+  tplPending: "Moderatsiyada",
+  tplApproved: "Tasdiqlangan",
+  tplRejected: "Rad etilgan",
+
+  // sms page
+  msgSent: "Yuborildi",
+  msgFailed: "Xato",
+  msgMock: "Sinov",
+
+  // reports
+  monthsShort: ["Yan", "Fev", "Mar", "Apr", "May", "Iyn", "Iyl", "Avg", "Sen", "Okt", "Noy", "Dek"],
+
+  // settings
+  language: "Til",
+  langAuto: "Avtomatik (Telegram)",
+  currencyLabel: "Valyuta",
 
   // customers
   customersTitle: "Mijozlar",
@@ -129,6 +178,48 @@ const en: TmaStrings = {
   addDebt: "Add debt",
   tabHome: "Home",
   tabCustomers: "Customers",
+  tabDebts: "Debts",
+  tabProducts: "Products",
+  tabTemplates: "Templates",
+  tabSms: "SMS",
+  tabReports: "Reports",
+  tabSettings: "Settings",
+
+  business: "Business",
+  smsBalance: "SMS balance",
+  logout: "Log out",
+
+  filterAll: "All",
+
+  addProduct: "Add product",
+  productName: "Name",
+  price: "Price",
+  noProducts: "No products",
+  confirmDelete: "Delete?",
+
+  addTemplate: "Add template",
+  templateName: "Name",
+  templateText: "Text",
+  templateType: "Type",
+  typeReminder: "Reminder",
+  typeOverdue: "Overdue",
+  typePayment: "Payment",
+  typeCustom: "Custom",
+  noTemplates: "No templates",
+  moderationNote: "New templates go live after operator approval.",
+  tplPending: "In review",
+  tplApproved: "Approved",
+  tplRejected: "Rejected",
+
+  msgSent: "Sent",
+  msgFailed: "Failed",
+  msgMock: "Test",
+
+  monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+
+  language: "Language",
+  langAuto: "Automatic (Telegram)",
+  currencyLabel: "Currency",
 
   customersTitle: "Customers",
   noCustomers: "No customers",

@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { createDebt, addCustomerPayment } from "@/lib/actions/debts";
 import { sendReminderAction } from "@/lib/actions/notify";
-import { formatMoney } from "@/lib/format";
+import { createProduct } from "@/lib/actions/products";
+import { createTemplate } from "@/lib/actions/templates";
 import type { CustomerView, TemplateOption } from "@/lib/queries";
+import { usePrefs } from "./prefs";
 import type { TmaLocale, TmaStrings } from "./strings";
 import { Sheet, Field, PrimaryButton } from "./ui";
 import { useTelegram } from "./useTelegram";
@@ -13,10 +15,11 @@ const selectClass =
   "tma-field w-full rounded-xl border px-3.5 py-3 text-base outline-none focus:border-[var(--tg-button)]";
 
 function Summary({ name, balance }: { name: string; balance: number }) {
+  const { fmt } = usePrefs();
   return (
     <div className="tma-sep mb-1 flex items-center justify-between rounded-xl border px-4 py-3 text-sm" style={{ background: "var(--tg-secondary-bg)" }}>
       <span className="tma-hint">{name}</span>
-      <span className="tma-text font-semibold">{formatMoney(Math.max(balance, 0))}</span>
+      <span className="tma-text font-semibold">{fmt(Math.max(balance, 0))}</span>
     </div>
   );
 }
@@ -258,6 +261,134 @@ export function ReminderSheet({
         )}
         <PrimaryButton type="submit" loading={busy}>
           {busy ? s.sending : s.send}
+        </PrimaryButton>
+      </form>
+    </Sheet>
+  );
+}
+
+export function ProductSheet({
+  open,
+  onClose,
+  onDone,
+  locale,
+  s,
+}: {
+  open: boolean;
+  onClose: () => void;
+  onDone: () => void;
+  locale: TmaLocale;
+  s: TmaStrings;
+}) {
+  const { haptic } = useTelegram();
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  function submit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    fd.set("locale", locale);
+    setBusy(true);
+    setErr(null);
+    void (async () => {
+      const res = await createProduct(fd);
+      setBusy(false);
+      if (res.ok) {
+        haptic("success");
+        onDone();
+        onClose();
+      } else {
+        haptic("error");
+        setErr(s.errorSave);
+      }
+    })();
+  }
+
+  return (
+    <Sheet open={open} onClose={onClose} title={s.addProduct}>
+      <form onSubmit={submit} className="space-y-4">
+        <Field label={s.productName} name="name" required placeholder="…" />
+        <Field label={s.price} name="price" type="text" inputMode="numeric" required placeholder="50000" />
+        {err && <p className="rounded-xl bg-rose-100 px-3 py-2 text-sm text-rose-700">{err}</p>}
+        <PrimaryButton type="submit" loading={busy}>
+          {busy ? s.saving : s.save}
+        </PrimaryButton>
+      </form>
+    </Sheet>
+  );
+}
+
+export function TemplateSheet({
+  open,
+  onClose,
+  onDone,
+  locale,
+  s,
+}: {
+  open: boolean;
+  onClose: () => void;
+  onDone: () => void;
+  locale: TmaLocale;
+  s: TmaStrings;
+}) {
+  const { haptic } = useTelegram();
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  function submit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    fd.set("locale", locale);
+    // One text drives all language bodies — the TMA keeps template editing simple.
+    const body = String(fd.get("body") ?? "");
+    fd.set("bodyUz", body);
+    fd.set("bodyRu", body);
+    fd.set("bodyEn", body);
+    fd.set("smsEnabled", "true");
+    setBusy(true);
+    setErr(null);
+    void (async () => {
+      const res = await createTemplate(fd);
+      setBusy(false);
+      if (res.ok) {
+        haptic("success");
+        onDone();
+        onClose();
+      } else {
+        haptic("error");
+        setErr(s.errorSave);
+      }
+    })();
+  }
+
+  return (
+    <Sheet open={open} onClose={onClose} title={s.addTemplate}>
+      <form onSubmit={submit} className="space-y-4">
+        <Field label={s.templateName} name="name" required minLength={2} placeholder="…" />
+        <label className="block">
+          <span className="tma-hint mb-1.5 block text-sm font-medium">{s.templateType}</span>
+          <select name="type" defaultValue="REMINDER" className={selectClass}>
+            <option value="REMINDER">{s.typeReminder}</option>
+            <option value="OVERDUE">{s.typeOverdue}</option>
+            <option value="PAYMENT">{s.typePayment}</option>
+            <option value="CUSTOM">{s.typeCustom}</option>
+          </select>
+        </label>
+        <label className="block">
+          <span className="tma-hint mb-1.5 block text-sm font-medium">{s.templateText}</span>
+          <textarea
+            name="body"
+            required
+            rows={4}
+            maxLength={1000}
+            placeholder="…"
+            className="tma-field w-full rounded-xl border px-3.5 py-3 text-base outline-none transition focus:border-[var(--tg-button)]"
+          />
+        </label>
+        <p className="tma-hint text-xs">{s.moderationNote}</p>
+        {err && <p className="rounded-xl bg-rose-100 px-3 py-2 text-sm text-rose-700">{err}</p>}
+        <PrimaryButton type="submit" loading={busy}>
+          {busy ? s.saving : s.save}
         </PrimaryButton>
       </form>
     </Sheet>

@@ -27,6 +27,7 @@ type WebApp = {
   onEvent?: (event: string, cb: () => void) => void;
   offEvent?: (event: string, cb: () => void) => void;
   close?: () => void;
+  showConfirm?: (message: string, callback?: (ok: boolean) => void) => void;
   BackButton?: { show: () => void; hide: () => void; onClick: (cb: () => void) => void; offClick: (cb: () => void) => void };
   HapticFeedback?: {
     impactOccurred?: (s: string) => void;
@@ -85,6 +86,8 @@ type TmaContext = {
   haptic: (kind?: HapticKind) => void;
   setBackButton: (visible: boolean, onClick?: () => void) => void;
   requestContact: () => Promise<string | null>;
+  /** Native Telegram confirm dialog, window.confirm in a plain browser. */
+  confirmDialog: (message: string) => Promise<boolean>;
   close: () => void;
 };
 
@@ -192,6 +195,14 @@ export function TmaProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
+  const confirmDialog = useCallback((message: string): Promise<boolean> => {
+    const wa = window.Telegram?.WebApp;
+    if (wa?.showConfirm) {
+      return new Promise((resolve) => wa.showConfirm!(message, (ok) => resolve(ok)));
+    }
+    return Promise.resolve(window.confirm(message));
+  }, []);
+
   const close = useCallback(() => window.Telegram?.WebApp?.close?.(), []);
 
   const value: TmaContext = {
@@ -202,6 +213,7 @@ export function TmaProvider({ children }: { children: React.ReactNode }) {
     haptic,
     setBackButton,
     requestContact,
+    confirmDialog,
     close,
   };
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
