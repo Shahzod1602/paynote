@@ -399,7 +399,27 @@
       "revokeConfirm": "Bu qurilmani chiqarib tashlaysizmi?",
       "noDevices": "Faol qurilmalar yo'q.",
       "lastActive": "Oxirgi faollik",
-      "joined": "Qo'shilgan"
+      "joined": "Qo'shilgan",
+      "smsTitle": "SMS yuborish",
+      "smsSubtitle": "O'z telefoningizni ulab, SMS'larni o'z raqamingizdan yuboring yoki bizning umumiy raqamdan foydalaning.",
+      "connectPhone": "Telefonni ulash",
+      "reconnect": "Qayta ulash",
+      "connecting": "Ulanmoqda...",
+      "scanQr": "Ilovada QR kodni skanerlang",
+      "orEnterCode": "yoki kodni kiriting",
+      "phoneConnected": "Telefon ulandi",
+      "online": "Onlayn",
+      "offline": "Oflayn",
+      "notConnected": "O'z telefoningiz ulanmagan",
+      "defaultMethod": "Standart yuborish usuli",
+      "viaOwn": "O'z telefonim",
+      "viaGateway": "Bizning raqam",
+      "viaOwnDisabled": "O'z telefonim usulini tanlash uchun avval telefonni ulang.",
+      "gatewayOnline": "Umumiy raqam onlayn",
+      "gatewayOffline": "Umumiy raqam oflayn",
+      "downloadApp": "Ilovani yuklab olish",
+      "saved": "Saqlandi",
+      "error": "Xatolik yuz berdi. Qayta urinib ko'ring."
     }
   }
 }

@@ -399,7 +399,27 @@
       "revokeConfirm": "Revoke this device?",
       "noDevices": "No active devices.",
       "lastActive": "Last active",
-      "joined": "Joined"
+      "joined": "Joined",
+      "smsTitle": "Sending SMS",
+      "smsSubtitle": "Connect your own phone to send SMS from your number, or use our shared number.",
+      "connectPhone": "Connect phone",
+      "reconnect": "Reconnect",
+      "connecting": "Connecting...",
+      "scanQr": "Scan the QR code in the app",
+      "orEnterCode": "or enter the code",
+      "phoneConnected": "Phone connected",
+      "online": "Online",
+      "offline": "Offline",
+      "notConnected": "Your phone is not connected",
+      "defaultMethod": "Default sending method",
+      "viaOwn": "My phone",
+      "viaGateway": "Our number",
+      "viaOwnDisabled": "Connect your phone first to use the \"My phone\" method.",
+      "gatewayOnline": "Shared number online",
+      "gatewayOffline": "Shared number offline",
+      "downloadApp": "Download the app",
+      "saved": "Saved",
+      "error": "Something went wrong. Please try again."
     }
   }
 }

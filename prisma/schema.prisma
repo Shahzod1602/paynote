@@ -50,6 +50,12 @@ model Business {
   name        String
   currency    String            @default("UZS")
   smsBalance  Int               @default(50)
+  // smsprovider (sms.identify.uz) integratsiyasi — har biznesga alohida akkaunt.
+  // O'z telefonini ulab "own" orqali yoki umumiy "gateway" orqali SMS yuborish uchun.
+  smsUserEmail String?          // provision qilingan smsprovider akkaunt emaili
+  smsPassword  String?          // zaxira parol (kalit yo'qolsa qayta login uchun) — ichki credential
+  smsApiKey    String?          // yuborish uchun sk_live_... kalit
+  smsVia       String           @default("gateway") // standart usul: "own" | "gateway"
   userId      String
   user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   customers   Customer[]

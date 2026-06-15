@@ -1,7 +1,7 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
 import { sendTelegram, type SendResult } from "./telegram";
-import { sendSms } from "./sms";
+import { sendSms, type SmsVia } from "./sms";
 import { buildTemplateVars, renderTemplate } from "./template";
 import { formatUZS } from "@/lib/format";
 
@@ -49,6 +49,8 @@ export async function sendReminder(opts: {
   channel: Channel;
   locale: Locale;
   templateId?: string;
+  /** SMS yuborish usulini majburlash. Berilmasa biznesning standart sozlamasi (smsVia). */
+  via?: SmsVia;
 }): Promise<ReminderOutcome> {
   const debt = await prisma.debt.findFirst({
     where: { id: opts.debtId, businessId: opts.businessId },
@@ -141,7 +143,9 @@ export async function sendReminder(opts: {
       return { ok: false, error: "NO_SMS_BALANCE" };
     }
 
-    result = await sendSms(recipient, text);
+    // Biznesning o'z smsprovider kaliti + yuborish usuli (own/gateway).
+    const via: SmsVia = opts.via ?? (debt.business.smsVia === "own" ? "own" : "gateway");
+    result = await sendSms(recipient, text, { apiKey: debt.business.smsApiKey, via });
 
     // Haqiqatda yuborilmasa (FAILED/MOCK) rezervni qaytaramiz.
     if (result.status !== "SENT") {

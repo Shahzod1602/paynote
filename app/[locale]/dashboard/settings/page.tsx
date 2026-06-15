@@ -5,6 +5,7 @@ import { getCurrentUser } from "@/lib/user";
 import { getUserSessions } from "@/lib/rate-limit";
 import { getSessionId } from "@/lib/session";
 import { SessionsClient } from "@/components/dashboard/SessionsClient";
+import { SmsDeviceClient } from "@/components/dashboard/SmsDeviceClient";
 
 export default async function SettingsPage({
   params,
@@ -26,6 +27,13 @@ export default async function SettingsPage({
     <div>
       <h1 className="text-2xl font-extrabold tracking-tight text-ink">{t.title}</h1>
       <p className="mt-1 text-sm text-muted">{t.subtitle}</p>
+
+      <div className="mt-8">
+        <h2 className="text-lg font-bold text-ink">{t.smsTitle}</h2>
+        <p className="mt-1 text-sm text-muted">{t.smsSubtitle}</p>
+
+        <SmsDeviceClient initial={null} dict={t} appUrl={process.env.SMS_APP_URL} />
+      </div>
 
       <div className="mt-8">
         <h2 className="text-lg font-bold text-ink">{t.devices}</h2>

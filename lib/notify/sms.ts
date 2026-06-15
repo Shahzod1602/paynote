@@ -11,13 +11,23 @@ function toE164(phone: string): string {
   return `+${full}`;
 }
 
+export type SmsVia = "own" | "gateway";
+
+export type SendSmsOptions = {
+  /** Biznesning o'z smsprovider kaliti. Yo'q bo'lsa global IDENTIFY_SMS_API_KEY ishlatiladi. */
+  apiKey?: string | null;
+  /** Yuborish usuli: o'z telefoni ("own") yoki umumiy raqam ("gateway"). */
+  via?: SmsVia;
+};
+
 /**
  * Sends an SMS via sms.identify.uz (https://sms.identify.uz/docs).
- * If IDENTIFY_SMS_API_KEY is not set, runs in MOCK mode (logs only, no network).
+ * Per-business apiKey + via (own/gateway) qo'llab-quvvatlanadi. Kalit topilmasa
+ * MOCK rejimida ishlaydi (faqat log, tarmoqsiz).
  * Provider-agnostic: swap this file to use another gateway without touching callers.
  */
-export async function sendSms(phone: string, text: string): Promise<SendResult> {
-  const apiKey = process.env.IDENTIFY_SMS_API_KEY;
+export async function sendSms(phone: string, text: string, opts: SendSmsOptions = {}): Promise<SendResult> {
+  const apiKey = opts.apiKey || process.env.IDENTIFY_SMS_API_KEY;
 
   if (!apiKey) {
     console.log(`[notify:sms MOCK] → ${phone}: ${text}`);
@@ -29,6 +39,7 @@ export async function sendSms(phone: string, text: string): Promise<SendResult> 
       to: toE164(phone),
       text,
     };
+    if (opts.via) body.via = opts.via;
     // Ixtiyoriy SIM tanlash (1 yoki 2).
     const sim = process.env.IDENTIFY_SMS_SIM;
     if (sim) body.sim = Number(sim);
