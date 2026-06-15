@@ -417,7 +417,8 @@
       "viaOwnDisabled": "Connect your phone first to use the \"My phone\" method.",
       "gatewayOnline": "Shared number online",
       "gatewayOffline": "Shared number offline",
-      "downloadApp": "Download the app",
+      "downloadApp": "Download the app (APK)",
+      "appHint": "Install on your Android phone, then scan the QR",
       "saved": "Saved",
       "error": "Something went wrong. Please try again."
     }

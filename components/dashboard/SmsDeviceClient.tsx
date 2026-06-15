@@ -27,6 +27,7 @@ type Dict = {
   gatewayOnline: string;
   gatewayOffline: string;
   downloadApp: string;
+  appHint: string;
   saved: string;
   error: string;
 };
@@ -166,6 +167,31 @@ export function SmsDeviceClient({
 
         {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
 
+        {/* Ilovani yuklab olish — har doim ko'rinadi (oson topilsin) */}
+        {appUrl && !connected && (
+          <a
+            href={appUrl}
+            download
+            className="mt-3 flex items-center gap-3 rounded-xl border border-dashed border-brand-300 bg-brand-50 p-3 transition hover:bg-brand-100"
+          >
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-600 text-white">
+              <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
+                <path
+                  d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+            <span>
+              <span className="block text-sm font-semibold text-brand-700">{dict.downloadApp}</span>
+              <span className="block text-xs text-muted">{dict.appHint}</span>
+            </span>
+          </a>
+        )}
+
         {/* QR + kod */}
         {pairing && (
           <div className="mt-4 flex flex-col items-center gap-2 border-t border-line pt-4">
@@ -176,16 +202,6 @@ export function SmsDeviceClient({
               {dict.orEnterCode}:{" "}
               <span className="font-mono text-lg font-bold tracking-widest text-ink">{pairing.code}</span>
             </p>
-            {appUrl && (
-              <a
-                href={appUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm font-semibold text-brand-600 hover:underline"
-              >
-                {dict.downloadApp}
-              </a>
-            )}
           </div>
         )}
       </div>

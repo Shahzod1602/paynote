@@ -417,7 +417,8 @@
       "viaOwnDisabled": "O'z telefonim usulini tanlash uchun avval telefonni ulang.",
       "gatewayOnline": "Umumiy raqam onlayn",
       "gatewayOffline": "Umumiy raqam oflayn",
-      "downloadApp": "Ilovani yuklab olish",
+      "downloadApp": "Ilovani yuklab olish (APK)",
+      "appHint": "Android telefoningizga o'rnating, so'ng QR'ni skanerlang",
       "saved": "Saqlandi",
       "error": "Xatolik yuz berdi. Qayta urinib ko'ring."
     }
