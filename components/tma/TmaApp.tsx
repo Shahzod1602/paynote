@@ -1,12 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { deleteProduct } from "@/lib/actions/products";
 import type { CustomerProfile } from "@/lib/queries";
 import { useTelegram } from "./useTelegram";
 import { AuthGate } from "./AuthGate";
 import { PrefsProvider, usePrefs } from "./prefs";
-import { getStrings, pickLocale } from "./strings";
+import { getStrings, pickLocale, type TmaLocale } from "./strings";
 import {
   HomeScreen,
   CustomersScreen,
@@ -265,6 +265,7 @@ function TmaAppInner() {
       <Header
         smsBalance={home.me.smsBalance}
         name={home.me.name}
+        locale={locale}
         onSearch={goSearch}
         onSms={() => setTab("sms")}
         onProfile={() => setSheet({ kind: "profile" })}
@@ -316,17 +317,19 @@ function TmaAppInner() {
 function Header({
   smsBalance,
   name,
+  locale,
   onSearch,
   onSms,
   onProfile,
 }: {
   smsBalance: number;
   name: string;
+  locale: TmaLocale;
   onSearch: () => void;
   onSms: () => void;
   onProfile: () => void;
 }) {
-  const { currency, setCurrency } = usePrefs();
+  const { currency, setCurrency, setLocalePref } = usePrefs();
   const initial = (name.trim().charAt(0) || "?").toUpperCase();
 
   return (
@@ -353,6 +356,15 @@ function Header({
             </svg>
             <span className="tma-text text-sm font-bold tabular-nums">{smsBalance}</span>
             <span className="tma-hint text-xs">SMS</span>
+          </button>
+
+          <button
+            onClick={() => setLocalePref(locale === "uz" ? "en" : "uz")}
+            aria-label="language"
+            className="tma-card tma-hint flex h-9 items-center gap-1 rounded-full border px-2.5 transition active:scale-95"
+          >
+            <GlobeIcon />
+            <span className="text-xs font-semibold uppercase">{locale}</span>
           </button>
 
           <div className="tma-card flex h-9 items-center rounded-full border p-0.5 text-xs font-semibold">
@@ -393,12 +405,21 @@ function TabBar({ tab, onTab, s }: { tab: Tab; onTab: (t: Tab) => void; s: Retur
     { key: "settings", label: s.tabSettings, icon: <GearIcon /> },
   ];
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+
   return (
     <nav
-      className="tma-card fixed inset-x-0 bottom-0 z-30 border-t"
+      className="tma-card fixed inset-x-0 bottom-0 z-30 border-t md:inset-x-auto md:left-1/2 md:w-full md:max-w-md md:-translate-x-1/2"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
-      <div className="tma-no-scrollbar flex overflow-x-auto">
+      <div
+        ref={scrollRef}
+        onWheel={(e) => {
+          // On laptop/PC the tab strip overflows — let the mouse wheel pan it sideways.
+          if (e.deltaY !== 0 && scrollRef.current) scrollRef.current.scrollLeft += e.deltaY;
+        }}
+        className="tma-no-scrollbar flex overflow-x-auto"
+      >
         {items.map((it) => (
           <button
             key={it.key}
@@ -415,6 +436,14 @@ function TabBar({ tab, onTab, s }: { tab: Tab; onTab: (t: Tab) => void; s: Retur
   );
 }
 
+function GlobeIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4">
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M3 12h18M12 3c2.6 2.6 2.6 15.4 0 18M12 3c-2.6 2.6-2.6 15.4 0 18" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
 function HomeIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">

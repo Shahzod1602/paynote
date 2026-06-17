@@ -167,7 +167,10 @@ export function HomeScreen({ s, userName, data }: { s: TmaStrings; userName: str
               <div className="flex items-center gap-3">
                 <Avatar name={d.customerName} />
                 <div className="min-w-0 flex-1">
-                  <p className="tma-text truncate font-semibold">{d.customerName}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="tma-text min-w-0 flex-1 truncate font-semibold">{d.customerName}</p>
+                    <MoneyAmount value={d.balance} className="tma-text shrink-0 font-bold" />
+                  </div>
                   <div className="mt-1 flex flex-wrap items-center gap-2">
                     <StatusBadge status={d.status} label={statusLabel(s, d.status)} />
                     {d.debtCount > 1 && (
@@ -177,7 +180,6 @@ export function HomeScreen({ s, userName, data }: { s: TmaStrings; userName: str
                     )}
                   </div>
                 </div>
-                <MoneyAmount value={d.balance} className="tma-text shrink-0 text-right font-bold" />
               </div>
             </div>
           ))
@@ -315,15 +317,15 @@ export function DebtsScreen({
         <div className="space-y-2">
           {filtered.map((d) => (
             <div key={d.id} className="tma-card rounded-2xl border p-3">
-              <button onClick={() => onOpenCustomer(d.customerId)} className="flex w-full items-center gap-3 text-left">
-                <div className="min-w-0 flex-1">
-                  <p className="tma-text truncate font-semibold">{d.customerName}</p>
-                  <div className="mt-1 flex flex-wrap items-center gap-2">
-                    <StatusBadge status={d.status} label={statusLabel(s, d.status)} />
-                    <span className="tma-hint whitespace-nowrap text-xs">{formatDate(d.dueDate)}</span>
-                  </div>
+              <button onClick={() => onOpenCustomer(d.customerId)} className="block w-full text-left">
+                <div className="flex items-center gap-2">
+                  <p className="tma-text min-w-0 flex-1 truncate font-semibold">{d.customerName}</p>
+                  <MoneyAmount value={d.balance} className="tma-text shrink-0 font-bold" />
                 </div>
-                <MoneyAmount value={d.balance} className="tma-text shrink-0 text-right font-bold" />
+                <div className="mt-1 flex flex-wrap items-center gap-2">
+                  <StatusBadge status={d.status} label={statusLabel(s, d.status)} />
+                  <span className="tma-hint whitespace-nowrap text-xs">{formatDate(d.dueDate)}</span>
+                </div>
               </button>
               {d.balance > 0 && (
                 <div className="tma-sep mt-2.5 flex items-center justify-end gap-1.5 border-t pt-2.5">
@@ -417,6 +419,17 @@ export function TemplatesScreen({
   templates: TemplateView[];
   onAdd: () => void;
 }) {
+  const [q, setQ] = useState("");
+  const filtered = useMemo(() => {
+    const query = q.trim().toLowerCase();
+    if (!query) return templates;
+    return templates.filter(
+      (t) =>
+        t.name.toLowerCase().includes(query) ||
+        (t.bodyUz ?? "").toLowerCase().includes(query)
+    );
+  }, [templates, q]);
+
   return (
     <div className="space-y-3 px-3 pb-28 pt-3">
       <h1 className="tma-text px-1 pt-1 text-xl font-extrabold tracking-tight">{s.tabTemplates}</h1>
@@ -428,11 +441,12 @@ export function TemplatesScreen({
         {s.addTemplate}
       </button>
       <p className="tma-hint px-1 text-xs">{s.moderationNote}</p>
-      {templates.length === 0 ? (
+      {templates.length > 0 && <SearchBar value={q} onChange={setQ} placeholder={s.search} />}
+      {filtered.length === 0 ? (
         <p className="tma-hint tma-sep rounded-2xl border border-dashed py-10 text-center text-sm">{s.noTemplates}</p>
       ) : (
         <div className="space-y-2">
-          {templates.map((t) => (
+          {filtered.map((t) => (
             <div key={t.id} className="tma-card rounded-2xl border p-3">
               <div className="flex items-center gap-2">
                 <p className="tma-text min-w-0 flex-1 truncate font-semibold">{t.name}</p>
