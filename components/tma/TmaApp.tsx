@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { deleteProduct } from "@/lib/actions/products";
+import { deleteTemplate } from "@/lib/actions/templates";
 import type { CustomerProfile } from "@/lib/queries";
 import { useTelegram } from "./useTelegram";
 import { AuthGate } from "./AuthGate";
@@ -161,6 +162,25 @@ function TmaAppInner() {
     [confirmDialog, s.confirmDelete, locale, haptic, loadHome]
   );
 
+  const onDeleteTemplate = useCallback(
+    (id: string) => {
+      void (async () => {
+        if (!(await confirmDialog(s.confirmDelete))) return;
+        const fd = new FormData();
+        fd.set("id", id);
+        fd.set("locale", locale);
+        const res = await deleteTemplate(fd);
+        if (res.ok) {
+          haptic("success");
+          void loadHome();
+        } else {
+          haptic("error");
+        }
+      })();
+    },
+    [confirmDialog, s.confirmDelete, locale, haptic, loadHome]
+  );
+
   if (!ready) {
     return (
       <div className="tma-app flex min-h-screen items-center justify-center">
@@ -299,7 +319,12 @@ function TmaAppInner() {
         />
       )}
       {tab === "templates" && (
-        <TemplatesScreen s={s} templates={home.templatesAll} onAdd={() => setSheet({ kind: "addTemplate" })} />
+        <TemplatesScreen
+          s={s}
+          templates={home.templatesAll}
+          onAdd={() => setSheet({ kind: "addTemplate" })}
+          onDelete={onDeleteTemplate}
+        />
       )}
       {tab === "sms" && <SmsScreen s={s} balance={home.me.smsBalance} messages={home.messages} />}
       {tab === "reports" && <ReportsScreen s={s} monthly={home.monthly} />}
@@ -337,7 +362,39 @@ function Header({
       className="tma-sep sticky top-0 z-30 border-b px-3 py-2"
       style={{ background: "var(--tg-secondary-bg)" }}
     >
-      <div className="flex items-center gap-2">
+      <div className="flex items-center justify-end gap-2">
+        <button
+          onClick={onSms}
+          className="tma-card flex h-9 items-center gap-1.5 rounded-full border px-3 transition active:scale-95"
+        >
+          <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 text-emerald-600">
+            <path d="M3 7h18v12H3zM3 7l2-3h14l2 3M16 13h2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          <span className="tma-text text-sm font-bold tabular-nums">{smsBalance}</span>
+          <span className="tma-hint text-xs">SMS</span>
+        </button>
+
+        <button
+          onClick={() => setLocalePref(nextLocale(locale))}
+          aria-label="language"
+          className="tma-card tma-hint flex h-9 items-center gap-1 rounded-full border px-2.5 transition active:scale-95"
+        >
+          <GlobeIcon />
+          <span className="text-xs font-semibold uppercase">{locale}</span>
+        </button>
+
+        <div className="tma-card flex h-9 items-center rounded-full border p-0.5 text-xs font-semibold">
+          {(["UZS", "USD"] as const).map((c) => (
+            <button
+              key={c}
+              onClick={() => setCurrency(c)}
+              className={`flex h-full items-center rounded-full px-2.5 transition ${currency === c ? "tma-btn" : "tma-hint"}`}
+            >
+              {c === "UZS" ? "so‘m" : "USD"}
+            </button>
+          ))}
+        </div>
+
         <button
           onClick={onSearch}
           aria-label="search"
@@ -346,47 +403,13 @@ function Header({
           <SearchIcon />
         </button>
 
-        <div className="ml-auto flex items-center gap-2">
-          <button
-            onClick={onSms}
-            className="tma-card flex h-9 items-center gap-1.5 rounded-full border px-3 transition active:scale-95"
-          >
-            <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 text-emerald-600">
-              <path d="M3 7h18v12H3zM3 7l2-3h14l2 3M16 13h2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <span className="tma-text text-sm font-bold tabular-nums">{smsBalance}</span>
-            <span className="tma-hint text-xs">SMS</span>
-          </button>
-
-          <button
-            onClick={() => setLocalePref(locale === "uz" ? "en" : "uz")}
-            aria-label="language"
-            className="tma-card tma-hint flex h-9 items-center gap-1 rounded-full border px-2.5 transition active:scale-95"
-          >
-            <GlobeIcon />
-            <span className="text-xs font-semibold uppercase">{locale}</span>
-          </button>
-
-          <div className="tma-card flex h-9 items-center rounded-full border p-0.5 text-xs font-semibold">
-            {(["UZS", "USD"] as const).map((c) => (
-              <button
-                key={c}
-                onClick={() => setCurrency(c)}
-                className={`flex h-full items-center rounded-full px-2.5 transition ${currency === c ? "tma-btn" : "tma-hint"}`}
-              >
-                {c === "UZS" ? "so‘m" : "USD"}
-              </button>
-            ))}
-          </div>
-
-          <button
-            onClick={onProfile}
-            aria-label="profile"
-            className="tma-btn grid h-9 w-9 shrink-0 place-items-center rounded-full text-sm font-bold transition active:scale-95"
-          >
-            {initial}
-          </button>
-        </div>
+        <button
+          onClick={onProfile}
+          aria-label="profile"
+          className="tma-btn grid h-9 w-9 shrink-0 place-items-center rounded-full text-sm font-bold transition active:scale-95"
+        >
+          {initial}
+        </button>
       </div>
     </header>
   );
@@ -407,17 +430,29 @@ function TabBar({ tab, onTab, s }: { tab: Tab; onTab: (t: Tab) => void; s: Retur
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  // Wheeling over the tab strip pans it sideways without scrolling the page.
+  // A native non-passive listener is required because React's onWheel is passive,
+  // so preventDefault() there is ignored and the page would scroll too.
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      const delta = e.deltaX !== 0 ? e.deltaX : e.deltaY;
+      if (delta === 0) return;
+      e.preventDefault();
+      el.scrollLeft += delta;
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, []);
+
   return (
     <nav
-      className="tma-card fixed inset-x-0 bottom-0 z-30 border-t md:inset-x-auto md:left-1/2 md:w-full md:max-w-md md:-translate-x-1/2"
+      className="tma-card fixed inset-x-0 bottom-0 z-30 border-t"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <div
         ref={scrollRef}
-        onWheel={(e) => {
-          // On laptop/PC the tab strip overflows — let the mouse wheel pan it sideways.
-          if (e.deltaY !== 0 && scrollRef.current) scrollRef.current.scrollLeft += e.deltaY;
-        }}
         className="tma-no-scrollbar flex overflow-x-auto"
       >
         {items.map((it) => (
@@ -434,6 +469,11 @@ function TabBar({ tab, onTab, s }: { tab: Tab; onTab: (t: Tab) => void; s: Retur
       </div>
     </nav>
   );
+}
+
+// Header globe cycles through the supported UI languages.
+function nextLocale(locale: TmaLocale): TmaLocale {
+  return locale === "uz" ? "en" : locale === "en" ? "ru" : "uz";
 }
 
 function GlobeIcon() {

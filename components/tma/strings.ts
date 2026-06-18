@@ -1,8 +1,11 @@
-export type TmaLocale = "uz" | "en";
+export type TmaLocale = "uz" | "en" | "ru";
 
 /** Telegram language_code → our locale (client-safe; mirrors lib/tma/verify). */
 export function pickLocale(code?: string): TmaLocale {
-  return code?.toLowerCase().startsWith("en") ? "en" : "uz";
+  const c = code?.toLowerCase() ?? "";
+  if (c.startsWith("ru")) return "ru";
+  if (c.startsWith("en")) return "en";
+  return "uz";
 }
 
 const uz = {
@@ -273,7 +276,132 @@ const en: TmaStrings = {
   templateUnavailable: "Template unavailable",
 };
 
-export const STRINGS: Record<TmaLocale, TmaStrings> = { uz, en };
+const ru: TmaStrings = {
+  openInTelegram: "Откройте это приложение через Telegram.",
+  connecting: "Подключение…",
+  linkTitle: "Привязка аккаунта",
+  linkSubtitle: "Привяжите Telegram к аккаунту Paynote — затем вход будет автоматическим.",
+  sharePhone: "Поделиться номером телефона",
+  orPassword: "или по телефону и паролю",
+  phone: "Телефон",
+  password: "Пароль",
+  login: "Войти",
+  linking: "Привязка…",
+  contactNoPhone: "Не удалось получить номер. Войдите по телефону и паролю.",
+  errPhoneNoMatch: "Этот номер не найден на платформе. Войдите по телефону и паролю.",
+  errInvalidCreds: "Неверный телефон или пароль.",
+  errTgLinked: "Этот Telegram уже привязан к другому аккаунту.",
+  errAccountLinked: "Этот аккаунт привязан к другому Telegram.",
+  errInvalidInit: "Ошибка проверки сессии. Откройте приложение заново.",
+  errGeneric: "Произошла ошибка. Попробуйте ещё раз.",
+
+  hello: "Привет",
+  totalOutstanding: "Всего долг",
+  customersCount: "Клиенты",
+  overdue: "Просрочено",
+  collectedThisMonth: "Собрано за месяц",
+  whoOwes: "Кто должен",
+  noDebts: "Пока долгов нет",
+  search: "Поиск…",
+  addDebt: "Добавить долг",
+  tabHome: "Главная",
+  tabCustomers: "Клиенты",
+  tabDebts: "Долги",
+  tabProducts: "Товары",
+  tabTemplates: "Шаблоны",
+  tabSms: "SMS",
+  tabReports: "Отчёты",
+  tabSettings: "Настройки",
+
+  business: "Бизнес",
+  smsBalance: "Баланс SMS",
+  logout: "Выйти",
+
+  filterAll: "Все",
+
+  addProduct: "Добавить товар",
+  productName: "Название",
+  price: "Цена",
+  noProducts: "Нет товаров",
+  confirmDelete: "Удалить?",
+
+  addTemplate: "Добавить шаблон",
+  templateName: "Название",
+  templateText: "Текст",
+  templateType: "Тип",
+  typeReminder: "Напоминание",
+  typeOverdue: "Просрочка",
+  typePayment: "Оплата",
+  typeCustom: "Другое",
+  noTemplates: "Нет шаблонов",
+  moderationNote: "Новый шаблон станет активным после одобрения оператора.",
+  tplPending: "На модерации",
+  tplApproved: "Одобрено",
+  tplRejected: "Отклонено",
+
+  msgSent: "Отправлено",
+  msgFailed: "Ошибка",
+  msgMock: "Тест",
+
+  monthsShort: ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"],
+
+  language: "Язык",
+  langAuto: "Автоматически (Telegram)",
+  currencyLabel: "Валюта",
+
+  customersTitle: "Клиенты",
+  noCustomers: "Нет клиентов",
+  debtCountSuffix: "долгов",
+  noPhoneShort: "нет телефона",
+
+  balance: "Баланс",
+  borrowed: "Взято",
+  paid: "Оплачено",
+  debtsTitle: "Долги",
+  messagesTitle: "Сообщения",
+  noMessages: "Нет сообщений",
+  overpaidCredit: "переплата",
+
+  statusPaid: "Оплачено",
+  statusPending: "Ожидает",
+  statusOverdue: "Просрочено",
+
+  amount: "Сумма",
+  dueDate: "Срок",
+  note: "Примечание",
+  customer: "Клиент",
+  selectCustomer: "Выберите клиента",
+  save: "Сохранить",
+  saving: "Сохранение…",
+  cancel: "Отмена",
+  errorSave: "Ошибка сохранения",
+
+  newDebt: "Новый долг",
+
+  payment: "Оплата",
+  paymentAmount: "Сумма оплаты",
+
+  reminder: "Напоминание",
+  reminderTitle: "Отправить напоминание",
+  channel: "Канал",
+  channelAuto: "Автоматически",
+  channelTelegram: "Telegram",
+  channelSms: "SMS",
+  template: "Шаблон",
+  templateDefault: "Стандартный текст",
+  send: "Отправить",
+  sending: "Отправка…",
+  sent: "Отправлено",
+  mockSent: "Отправлено (тестовый режим)",
+  failed: "Не отправлено",
+  noPhone: "У клиента нет телефона",
+  noTelegram: "У клиента нет Telegram",
+  noSmsBalance: "Баланс SMS закончился",
+  rateLimited: "Слишком много SMS. Попробуйте позже.",
+  templateUnavailable: "Шаблон недоступен",
+};
+
+export const STRINGS: Record<TmaLocale, TmaStrings> = { uz, en, ru };
 
 export function getStrings(locale: TmaLocale): TmaStrings {
   return STRINGS[locale];

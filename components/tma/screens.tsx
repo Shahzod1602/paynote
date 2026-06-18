@@ -414,10 +414,12 @@ export function TemplatesScreen({
   s,
   templates,
   onAdd,
+  onDelete,
 }: {
   s: TmaStrings;
   templates: TemplateView[];
   onAdd: () => void;
+  onDelete: (id: string) => void;
 }) {
   const [q, setQ] = useState("");
   const filtered = useMemo(() => {
@@ -453,6 +455,9 @@ export function TemplatesScreen({
                 <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${TPL_BADGE[t.status] ?? ""}`}>
                   {templateStatusLabel(s, t.status)}
                 </span>
+                <IconBtn danger onClick={() => onDelete(t.id)}>
+                  <TrashIcon />
+                </IconBtn>
               </div>
               <p className="tma-hint mt-0.5 text-xs">{templateTypeLabel(s, t.type)}</p>
               <p className="tma-text mt-1.5 line-clamp-2 text-sm">{t.bodyUz}</p>
@@ -629,6 +634,7 @@ export function SettingsScreen({
             <option value="auto">{s.langAuto}</option>
             <option value="uz">O‘zbekcha</option>
             <option value="en">English</option>
+            <option value="ru">Русский</option>
           </select>
         </label>
         <label className="block">

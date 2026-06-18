@@ -38,7 +38,7 @@ export function PrefsProvider({ children }: { children: React.ReactNode }) {
       const l = localStorage.getItem(LOCALE_KEY);
       // eslint-disable-next-line react-hooks/set-state-in-effect
       if (c === "UZS" || c === "USD") setCurrencyState(c);
-      if (l === "auto" || l === "uz" || l === "en") setLocalePrefState(l);
+      if (l === "auto" || l === "uz" || l === "en" || l === "ru") setLocalePrefState(l);
     } catch {
       /* storage unavailable — keep defaults */
     }

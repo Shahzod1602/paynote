@@ -68,18 +68,5 @@
   display: none;
 }
 
-/* Laptop / PC: don't stretch the Mini App across the whole window — render it as
-   a centered phone-width frame on a neutral backdrop. The fixed bottom nav is
-   centered to the same width in TmaApp. */
-@media (min-width: 768px) {
-  body {
-    background: #0b1220;
-  }
-  .tma-app {
-    max-width: 28rem;
-    margin-inline: auto;
-    min-height: 100vh;
-    min-height: 100dvh;
-    box-shadow: 0 0 0 1px var(--tg-separator), 0 24px 60px rgba(0, 0, 0, 0.35);
-  }
-}
+/* Laptop / PC: use the full window width (default laptop size) rather than a
+   centered phone-width frame. The bottom nav spans the full width to match. */
